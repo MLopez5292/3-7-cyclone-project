@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth"><head><script>(function(){
+function slug(s){
+  try{return s.trim().toLowerCase().replace(/[^\p{L}\p{N}\s_-]/gu,'').replace(/\s+/g,'-');}
+  catch(e){return s.trim().toLowerCase().replace(/[^a-z0-9\s_-]/g,'').replace(/\s+/g,'-');}
+}
+function findHashTarget(hash){
+  if(!hash||hash==='#')return null;
+  var raw=hash.charAt(0)==='#'?hash.slice(1):hash;
+  var dec=raw;
+  try{dec=decodeURIComponent(raw);}catch(e){}
+  var el=document.getElementById(raw)||document.getElementById(dec);
+  if(el)return el;
+  try{
+    if(typeof CSS!=='undefined'&&CSS.escape){
+      el=document.querySelector('[name="'+CSS.escape(raw)+'"]')||
+         document.querySelector('[name="'+CSS.escape(dec)+'"]');
+    }else{
+      var named=document.getElementsByName(raw);
+      if(named&&named.length>0)return named[0];
+    }
+  }catch(e){}
+  if(el)return el;
+  var targetSlug=slug(dec);
+  if(targetSlug){
+    var headings=document.querySelectorAll('h1,h2,h3,h4,h5,h6');
+    for(var i=0;i<headings.length;i++){
+      if(slug(headings[i].textContent||'')===targetSlug)return headings[i];
+    }
+  }
+  return null;
+}
+function getInPageHash(a,href){
+  if(href.charAt(0)==='#')return href;
+  try{
+    var u=new URL(href,window.location.href);
+    if(u.hash&&u.origin===window.location.origin&&u.pathname===window.location.pathname){
+      return u.hash;
+    }
+  }catch(e){}
+  return null;
+}
+function findAnchor(target){
+  var el=target instanceof Element?target:(target&&target.parentElement?target.parentElement:null);
+  return el&&typeof el.closest==='function'?el.closest('a'):null;
+}
+function configureAnchor(a){
+  var href=a.getAttribute('href');
+  if(!href||href.trim().toLowerCase().indexOf('javascript:')===0||a.hasAttribute('download'))return;
+  if(getInPageHash(a,href)!==null)return;
+  var t=a.getAttribute('target');
+  if(!t||t.toLowerCase()!=='_blank'){a.setAttribute('target','_blank');}
+  if(!a.getAttribute('rel')){a.setAttribute('rel','noopener noreferrer');}
+}
+function configureAllAnchors(){
+  var anchors=document.querySelectorAll('a[href]');
+  for(var i=0;i<anchors.length;i++){configureAnchor(anchors[i]);}
+}
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',configureAllAnchors,{once:true});
+}else{
+  configureAllAnchors();
+}
+document.addEventListener('click',function(event){
+  var a=findAnchor(event.target);
+  if(a)configureAnchor(a);
+},{capture:true});
+document.addEventListener('click',function(event){
+  if(event.defaultPrevented)return;
+  var a=findAnchor(event.target);
+  if(!a)return;
+  var href=a.getAttribute('href');
+  if(!href||href.trim().toLowerCase().indexOf('javascript:')===0||a.hasAttribute('download'))return;
+  var hash=getInPageHash(a,href);
+  if(hash===null)return;
+  event.preventDefault();
+  if(hash==='#'){window.scrollTo({top:0,behavior:'smooth'});return;}
+  var targetEl=findHashTarget(hash);
+  if(targetEl){targetEl.scrollIntoView({behavior:'smooth',block:'start'});}
+});
+})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE 3.7 CYCLONE PROJECT — S197 Build Dossier</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,700&amp;family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            obsidian: '#0A0A0C',
+            graphite: '#141518',
+            carbon: '#1C1E24',
+            ruby: {
+              DEFAULT: '#9B111E',
+              bright: '#D41C2C',
+              dark: '#5E0911',
+              glow: 'rgba(212, 28, 44, 0.22)'
+            },
+            titanium: '#8E929B',
+            pearl: '#F5F5F7'
+          },
+          fontFamily: {
+            display: ['"Barlow Condensed"', 'sans-serif'],
+            sans: ['"Inter"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background-color: #0A0A0C;
+      color: #F5F5F7;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Subtle engineering blueprint grid background */
+    .blueprint-grid {
+      background-size: 48px 48px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    }
+
+    /* Ruby Red metallic sheen */
+    .ruby-gradient-text {
+      background: linear-gradient(135deg, #F5F5F7 0%, #F5F5F7 45%, #D41C2C 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .ruby-border-glow {
+      box-shadow: 0 0 28px -6px rgba(155, 17, 30, 0.45);
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0A0A0C;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2A2D36;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #9B111E;
+    }
+
+    /* Racing stripe divider accent */
+    .racing-stripe {
+      background: linear-gradient(90deg, #9B111E 0%, #D41C2C 50%, transparent 100%);
+    }
+  </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:"Inter", sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:"JetBrains Mono", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.inset-0{inset:0px}.inset-x-0{left:0px;right:0px}.-right-32{right:-8rem}.-top-32{top:-8rem}.bottom-0{bottom:0px}.bottom-6{bottom:1.5rem}.bottom-\[21\%\]{bottom:21%}.left-1\/4{left:25%}.left-\[68\.5\%\]{left:68.5%}.right-0{right:0px}.right-6{right:1.5rem}.top-0{top:0px}.bottom-3{bottom:0.75rem}.left-3{left:0.75rem}.right-3{right:0.75rem}.top-3{top:0.75rem}.z-0{z-index:0}.z-10{z-index:10}.z-40{z-index:40}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.my-auto{margin-top:auto;margin-bottom:auto}.mb-1{margin-bottom:0.25rem}.mb-12{margin-bottom:3rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mt-0\.5{margin-top:0.125rem}.mt-12{margin-top:3rem}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.aspect-\[16\/10\]{aspect-ratio:16/10}.h-1{height:0.25rem}.h-10{height:2.5rem}.h-16{height:4rem}.h-2{height:0.5rem}.h-2\.5{height:0.625rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-72{height:18rem}.h-9{height:2.25rem}.h-\[300px\]{height:300px}.h-\[620px\]{height:620px}.h-full{height:100%}.h-3\.5{height:0.875rem}.max-h-\[72vh\]{max-height:72vh}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-2{width:0.5rem}.w-2\.5{width:0.625rem}.w-20{width:5rem}.w-28{width:7rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-72{width:18rem}.w-9{width:2.25rem}.w-\[500px\]{width:500px}.w-\[620px\]{width:620px}.w-auto{width:auto}.w-full{width:100%}.w-3\.5{width:0.875rem}.max-w-2xl{max-width:42rem}.max-w-3xl{max-width:48rem}.max-w-5xl{max-width:64rem}.max-w-6xl{max-width:72rem}.max-w-7xl{max-width:80rem}.flex-1{flex:1 1 0%}.-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-y-24{--tw-translate-y:6rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.scale-105{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.cursor-pointer{cursor:pointer}.select-none{-webkit-user-select:none;user-select:none}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-10{gap:2.5rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.gap-1\.5{gap:0.375rem}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.scroll-smooth{scroll-behavior:smooth}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-3xl{border-radius:1.5rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.rounded-md{border-radius:0.375rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-ruby-bright\/40{border-color:rgb(212 28 44 / 0.4)}.border-ruby-bright\/60{border-color:rgb(212 28 44 / 0.6)}.border-ruby-bright\/70{border-color:rgb(212 28 44 / 0.7)}.border-white\/10{border-color:rgb(255 255 255 / 0.1)}.border-white\/15{border-color:rgb(255 255 255 / 0.15)}.bg-emerald-400{--tw-bg-opacity:1;background-color:rgb(52 211 153 / var(--tw-bg-opacity, 1))}.bg-graphite{--tw-bg-opacity:1;background-color:rgb(20 21 24 / var(--tw-bg-opacity, 1))}.bg-graphite\/35{background-color:rgb(20 21 24 / 0.35)}.bg-graphite\/50{background-color:rgb(20 21 24 / 0.5)}.bg-graphite\/85{background-color:rgb(20 21 24 / 0.85)}.bg-graphite\/90{background-color:rgb(20 21 24 / 0.9)}.bg-obsidian{--tw-bg-opacity:1;background-color:rgb(10 10 12 / var(--tw-bg-opacity, 1))}.bg-obsidian\/80{background-color:rgb(10 10 12 / 0.8)}.bg-obsidian\/85{background-color:rgb(10 10 12 / 0.85)}.bg-obsidian\/95{background-color:rgb(10 10 12 / 0.95)}.bg-ruby-bright{--tw-bg-opacity:1;background-color:rgb(212 28 44 / var(--tw-bg-opacity, 1))}.bg-ruby-bright\/10{background-color:rgb(212 28 44 / 0.1)}.bg-ruby\/15{background-color:rgb(155 17 30 / 0.15)}.bg-ruby\/20{background-color:rgb(155 17 30 / 0.2)}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.bg-gradient-to-t{background-image:linear-gradient(to top, var(--tw-gradient-stops))}.from-obsidian{--tw-gradient-from:#0A0A0C var(--tw-gradient-from-position);--tw-gradient-to:rgb(10 10 12 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-obsidian\/90{--tw-gradient-from:rgb(10 10 12 / 0.9) var(--tw-gradient-from-position);--tw-gradient-to:rgb(10 10 12 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-ruby-bright{--tw-gradient-from:#D41C2C var(--tw-gradient-from-position);--tw-gradient-to:rgb(212 28 44 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-obsidian\/40{--tw-gradient-to:rgb(10 10 12 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), rgb(10 10 12 / 0.4) var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-obsidian\/70{--tw-gradient-to:rgb(10 10 12 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), rgb(10 10 12 / 0.7) var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-obsidian\/40{--tw-gradient-to:rgb(10 10 12 / 0.4) var(--tw-gradient-to-position)}.to-ruby-dark{--tw-gradient-to:#5E0911 var(--tw-gradient-to-position)}.to-transparent{--tw-gradient-to:transparent var(--tw-gradient-to-position)}.object-contain{object-fit:contain}.object-cover{object-fit:cover}.object-center{object-position:center}.p-1{padding:0.25rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-20{padding-top:5rem;padding-bottom:5rem}.py-3\.5{padding-top:0.875rem;padding-bottom:0.875rem}.py-4{padding-top:1rem;padding-bottom:1rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.pb-2{padding-bottom:0.5rem}.pb-8{padding-bottom:2rem}.pt-24{padding-top:6rem}.pt-8{padding-top:2rem}.pt-3{padding-top:0.75rem}.font-display{font-family:"Barlow Condensed", sans-serif}.font-mono{font-family:"JetBrains Mono", monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-light{font-weight:300}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-\[0\.95\]{line-height:0.95}.leading-none{line-height:1}.leading-relaxed{line-height:1.625}.leading-snug{line-height:1.375}.tracking-\[0\.22em\]{letter-spacing:0.22em}.tracking-\[0\.25em\]{letter-spacing:0.25em}.tracking-\[0\.2em\]{letter-spacing:0.2em}.tracking-tight{letter-spacing:-0.025em}.tracking-tighter{letter-spacing:-0.05em}.tracking-wide{letter-spacing:0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-emerald-400{--tw-text-opacity:1;color:rgb(52 211 153 / var(--tw-text-opacity, 1))}.text-pearl{--tw-text-opacity:1;color:rgb(245 245 247 / var(--tw-text-opacity, 1))}.text-pearl\/85{color:rgb(245 245 247 / 0.85)}.text-ruby-bright{--tw-text-opacity:1;color:rgb(212 28 44 / var(--tw-text-opacity, 1))}.text-titanium{--tw-text-opacity:1;color:rgb(142 146 155 / var(--tw-text-opacity, 1))}.text-titanium\/70{color:rgb(142 146 155 / 0.7)}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-titanium\/80{color:rgb(142 146 155 / 0.8)}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.opacity-0{opacity:0}.opacity-25{opacity:0.25}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.blur-\[120px\]{--tw-blur:blur(120px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.blur-\[140px\]{--tw-blur:blur(140px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.blur-\[90px\]{--tw-blur:blur(90px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur-lg{--tw-backdrop-blur:blur(16px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-1000{transition-duration:1000ms}.duration-300{transition-duration:300ms}.duration-500{transition-duration:500ms}.selection\:bg-ruby-bright *::selection{--tw-bg-opacity:1;background-color:rgb(212 28 44 / var(--tw-bg-opacity, 1))}.selection\:text-white *::selection{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.selection\:bg-ruby-bright::selection{--tw-bg-opacity:1;background-color:rgb(212 28 44 / var(--tw-bg-opacity, 1))}.selection\:text-white::selection{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:border-ruby-bright\/50:hover{border-color:rgb(212 28 44 / 0.5)}.hover\:border-ruby-bright\/60:hover{border-color:rgb(212 28 44 / 0.6)}.hover\:bg-carbon:hover{--tw-bg-opacity:1;background-color:rgb(28 30 36 / var(--tw-bg-opacity, 1))}.hover\:bg-ruby:hover{--tw-bg-opacity:1;background-color:rgb(155 17 30 / var(--tw-bg-opacity, 1))}.hover\:bg-ruby-bright:hover{--tw-bg-opacity:1;background-color:rgb(212 28 44 / var(--tw-bg-opacity, 1))}.hover\:text-pearl:hover{--tw-text-opacity:1;color:rgb(245 245 247 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:scale-105{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:text-ruby-bright{--tw-text-opacity:1;color:rgb(212 28 44 / var(--tw-text-opacity, 1))}@media (min-width: 640px){.sm\:h-20{height:5rem}.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.sm\:flex-row{flex-direction:row}.sm\:items-center{align-items:center}.sm\:gap-3{gap:0.75rem}.sm\:gap-4{gap:1rem}.sm\:p-10{padding:2.5rem}.sm\:p-8{padding:2rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:py-24{padding-top:6rem;padding-bottom:6rem}.sm\:py-28{padding-top:7rem;padding-bottom:7rem}.sm\:pb-12{padding-bottom:3rem}.sm\:pt-32{padding-top:8rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-4xl{font-size:2.25rem;line-height:2.5rem}.sm\:text-5xl{font-size:3rem;line-height:1}.sm\:text-7xl{font-size:4.5rem;line-height:1}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-xl{font-size:1.25rem;line-height:1.75rem}.sm\:text-xs{font-size:0.75rem;line-height:1rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}}@media (min-width: 768px){.md\:flex{display:flex}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:items-end{align-items:flex-end}}@media (min-width: 1024px){.lg\:col-span-4{grid-column:span 4 / span 4}.lg\:col-span-5{grid-column:span 5 / span 5}.lg\:col-span-7{grid-column:span 7 / span 7}.lg\:col-span-8{grid-column:span 8 / span 8}.lg\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.lg\:flex-row{flex-direction:row}.lg\:items-end{align-items:flex-end}.lg\:gap-14{gap:3.5rem}.lg\:px-8{padding-left:2rem;padding-right:2rem}.lg\:text-8xl{font-size:6rem;line-height:1}}</style></head>
+<body class="blueprint-grid antialiased selection:bg-ruby-bright selection:text-white">
+
+  <!-- STICKY NAVIGATION BAR -->
+  <header class="fixed top-0 inset-x-0 z-40 bg-obsidian/85 backdrop-blur-md border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
+      <!-- Project Emblem & Wordmark -->
+      <a href="#top" class="flex items-center gap-3 group">
+        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-ruby-bright to-ruby-dark flex items-center justify-center border border-white/15 shadow-lg group-hover:scale-105 transition-transform">
+          <span class="font-display font-extrabold text-white text-lg tracking-tighter">3.7</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-display font-bold text-lg sm:text-xl tracking-wider uppercase text-pearl leading-none">
+            THE 3.7 CYCLONE <span class="text-ruby-bright">PROJECT</span>
+          </span>
+          <span class="font-mono text-[10px] tracking-[0.22em] text-titanium uppercase mt-0.5">
+            S197 // 2014 BUILD DOSSIER
+          </span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden md:flex items-center gap-8 text-xs font-mono uppercase tracking-widest text-titanium">
+        <a href="#philosophy" data-i18n="nav_philosophy" class="hover:text-pearl transition-colors py-2">Filosofía</a>
+        <a href="#gallery" data-i18n="nav_gallery" class="hover:text-pearl transition-colors py-2">Galería</a>
+        <a href="#specs" data-i18n="nav_specs" class="hover:text-pearl transition-colors py-2">Ficha Técnica</a>
+        <a href="#studio-tools" data-i18n="nav_publish" class="hover:text-pearl transition-colors py-2">Publicación</a>
+      </nav>
+
+      <!-- Bilingual Toggle ES / EN -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <div class="inline-flex items-center p-1 rounded-xl bg-graphite border border-white/10" role="group" aria-label="Language Switcher">
+          <button id="btn-es" onclick="setLanguage('es')" class="px-3 py-1.5 rounded-lg font-mono text-xs font-semibold tracking-wider transition-all bg-ruby-bright text-white shadow-sm">
+            ES
+          </button>
+          <button id="btn-en" onclick="setLanguage('en')" class="px-3 py-1.5 rounded-lg font-mono text-xs font-semibold tracking-wider transition-all text-titanium hover:text-pearl">
+            EN
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section id="top" class="relative min-h-screen flex flex-col justify-between pt-24 pb-8 sm:pt-32 sm:pb-12 overflow-hidden border-b border-white/10">
+    <!-- Hero Background Layer (Supports direct photo upload or default Ruby Red S197 cinematic canvas) -->
+    <div id="hero-bg-container" class="absolute inset-0 z-0">
+      <img id="hero-img" src="" alt="2014 Ford Mustang V6 3.7 Cyclone Ruby Red" class="hidden w-full h-full object-cover object-center scale-105 transition-transform duration-1000">
+      <!-- Atmospheric SVG Studio Silhouette Backdrop when local file isn't loaded yet -->
+      <div id="hero-fallback" class="w-full h-full relative bg-obsidian flex items-center justify-center overflow-hidden">
+        <div class="absolute -top-32 -right-32 w-[620px] h-[620px] rounded-full bg-ruby/20 blur-[140px]"></div>
+        <div class="absolute bottom-0 left-1/4 w-[500px] h-[300px] rounded-full bg-ruby-bright/10 blur-[120px]"></div>
+        <!-- Technical S197 Wireframe Accent -->
+        <svg viewBox="0 0 1200 420" class="w-full max-w-6xl opacity-25 px-6 select-none" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M90 295 L140 285 L195 225 L355 205 L515 135 L780 135 L955 205 L1085 225 L1115 268 L1095 298 L985 298 C985 252 915 252 915 298 L335 298 C335 252 265 252 265 298 L115 298 Z" stroke="#D41C2C" stroke-width="2.2"></path>
+          <path d="M365 205 L520 148 L765 148 L915 205 Z" stroke="#F5F5F7" stroke-width="1.2" stroke-dasharray="6 6"></path>
+          <circle cx="300" cy="298" r="46" stroke="#F5F5F7" stroke-width="2"></circle>
+          <circle cx="300" cy="298" r="30" stroke="#D41C2C" stroke-width="1.5"></circle>
+          <circle cx="950" cy="298" r="46" stroke="#F5F5F7" stroke-width="2"></circle>
+          <circle cx="950" cy="298" r="30" stroke="#D41C2C" stroke-width="1.5"></circle>
+          <line x1="40" y1="344" x2="1160" y2="344" stroke="#8E929B" stroke-width="1" stroke-opacity="0.4"></line>
+          <text x="55" y="105" fill="#8E929B" font-family="JetBrains Mono" font-size="11" letter-spacing="3">CHASSIS CODE: S197 // 3.7L TI-VCT CYCLONE V6 // WHEELBASE: 2,720 MM</text>
+        </svg>
+      </div>
+      <!-- Editorial Vignette Overlay -->
+      <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/70 to-obsidian/40"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-obsidian/90 via-obsidian/40 to-transparent"></div>
+    </div>
+
+    <!-- Hero Main Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full my-auto pt-8">
+      <div class="max-w-3xl">
+        <!-- Spec Pill -->
+        <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-graphite/90 border border-ruby-bright/40 mb-6 backdrop-blur-sm">
+          <span class="w-2 h-2 rounded-full bg-ruby-bright animate-pulse"></span>
+          <span class="font-mono text-[11px] sm:text-xs tracking-[0.2em] uppercase text-pearl">
+            S197 PLATFORM // 2014 SPEC // RUBY RED METALLIC
+          </span>
+        </div>
+
+        <!-- Main Title -->
+        <h1 class="font-display font-extrabold text-5xl sm:text-7xl lg:text-8xl uppercase tracking-tight leading-[0.95] text-pearl mb-5">
+          THE 3.7 <span class="text-ruby-bright">CYCLONE</span><br>PROJECT
+        </h1>
+
+        <div class="h-1 w-28 racing-stripe rounded-full mb-6"></div>
+
+        <!-- Dynamic Subtitle -->
+        <p data-i18n="hero_subtitle" class="text-base sm:text-xl text-pearl/85 font-light leading-relaxed max-w-2xl mb-8">Ingeniería atmosférica, dinámica de chasis y estética OEM+ sobre la última evolución de la plataforma S197.</p>
+
+        <!-- Action Controls -->
+        <div class="flex flex-wrap items-center gap-3 sm:gap-4">
+          <a href="#specs" class="px-6 py-3.5 rounded-xl bg-ruby-bright hover:bg-ruby text-white font-display font-bold uppercase tracking-wider text-base transition-all ruby-border-glow flex items-center gap-2">
+            <span data-i18n="hero_cta_specs">Explorar Ficha Técnica</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </a>
+          <a href="#gallery" class="px-6 py-3.5 rounded-xl bg-graphite/90 hover:bg-carbon text-pearl border border-white/15 font-display font-bold uppercase tracking-wider text-base transition-all flex items-center gap-2">
+            <span data-i18n="hero_cta_gallery">Ver Galería</span>
+          </a>
+          <label for="hero-file-input" class="cursor-pointer px-4 py-3.5 rounded-xl bg-obsidian/80 hover:bg-carbon text-titanium hover:text-pearl border border-white/10 font-mono text-xs uppercase tracking-wider transition-all flex items-center gap-2" title="Cargar foto de portada (IMG_3688.jpeg)">
+            <svg class="w-4 h-4 text-ruby-bright" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            <span data-i18n="hero_upload_btn">Portada (IMG_3688)</span>
+          </label>
+          <input id="hero-file-input" type="file" accept="image/*" class="hidden" onchange="handleHeroUpload(event)">
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Telemetry Strip -->
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mt-12">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div class="p-4 rounded-2xl bg-graphite/85 backdrop-blur-md border border-white/10">
+          <div class="font-mono text-[10px] uppercase tracking-widest text-titanium mb-1" data-i18n="stat_engine_label">Motorización</div>
+          <div class="font-display font-bold text-xl sm:text-2xl text-pearl tracking-wide">3.7L DOHC V6</div>
+          <div class="font-mono text-xs text-ruby-bright mt-0.5">CYCLONE TI-VCT</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-graphite/85 backdrop-blur-md border border-white/10">
+          <div class="font-mono text-[10px] uppercase tracking-widest text-titanium mb-1" data-i18n="stat_power_label">Potencia Base + Admisión</div>
+          <div class="font-display font-bold text-xl sm:text-2xl text-pearl tracking-wide">309 CV / 305 HP</div>
+          <div class="font-mono text-xs text-ruby-bright mt-0.5">AIRAID MXP + BBK 73MM</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-graphite/85 backdrop-blur-md border border-white/10">
+          <div class="font-mono text-[10px] uppercase tracking-widest text-titanium mb-1" data-i18n="stat_chassis_label">Puesta a Punto Chasis</div>
+          <div class="font-display font-bold text-xl sm:text-2xl text-pearl tracking-wide">BILSTEIN B6 + EIBACH</div>
+          <div class="font-mono text-xs text-ruby-bright mt-0.5">BOSS 302 + WHITELINE</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-graphite/85 backdrop-blur-md border border-white/10">
+          <div class="font-mono text-[10px] uppercase tracking-widest text-titanium mb-1" data-i18n="stat_wheels_label">Set de Llantas &amp; Gomas</div>
+          <div class="font-display font-bold text-xl sm:text-2xl text-pearl tracking-wide">19" DARK HORSE</div>
+          <div class="font-mono text-xs text-ruby-bright mt-0.5">PIRELLI P ZERO 255 / 275</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 01: PROJECT PHILOSOPHY -->
+  <section id="philosophy" class="py-20 sm:py-28 border-b border-white/10 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+        <div class="lg:col-span-5">
+          <div class="font-mono text-xs uppercase tracking-[0.25em] text-ruby-bright mb-3">
+            01 // <span data-i18n="phil_tag">CONCEPTO DEL PROYECTO</span>
+          </div>
+          <h2 data-i18n="phil_title" class="font-display font-extrabold text-4xl sm:text-5xl uppercase tracking-tight text-pearl leading-none mb-6">PRECISIÓN DE CHASIS Y CARÁCTER ATMOSFÉRICO</h2>
+          <div class="h-1 w-20 bg-ruby-bright rounded-full mb-6"></div>
+          <p data-i18n="phil_p1" class="text-titanium text-base leading-relaxed mb-4">THE 3.7 CYCLONE PROJECT nace con una premisa clara: desarrollar un Mustang S197 2014 con criterio de ingeniería y coherencia estética, alejado de artificios genéricos.</p>
+          <p data-i18n="phil_p2" class="text-titanium text-base leading-relaxed">Cada componente instalado responde a un equilibrio real entre comportamiento dinámico en curva, acústica pura de seis cilindros en V con línea completa de escape y una presencia exterior inspirada en las ediciones más icónicas de Ford Performance.</p>
+        </div>
+
+        <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="p-6 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-colors">
+            <div class="w-10 h-10 rounded-xl bg-ruby/20 border border-ruby-bright/40 flex items-center justify-center font-mono text-sm font-bold text-ruby-bright mb-4">
+              01
+            </div>
+            <h3 data-i18n="pillar_1_title" class="font-display font-bold text-2xl uppercase text-pearl mb-2">Identidad Ruby Red</h3>
+            <p data-i18n="pillar_1_desc" class="text-sm text-titanium leading-relaxed">Acabado tricapa Ruby Red Metallic combinado con franjas negras, capó estilo Shelby GT500 2020, frontal GT con angel eyes y llantas Dark Horse 2025 en antracita.</p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-colors">
+            <div class="w-10 h-10 rounded-xl bg-ruby/20 border border-ruby-bright/40 flex items-center justify-center font-mono text-sm font-bold text-ruby-bright mb-4">
+              02
+            </div>
+            <h3 data-i18n="pillar_2_title" class="font-display font-bold text-2xl uppercase text-pearl mb-2">Dinámica S197</h3>
+            <p data-i18n="pillar_2_desc" class="text-sm text-titanium leading-relaxed">Eje rígido trasero controlado mediante amortiguación Bilstein B6, muelles Eibach Pro-Kit, estabilizadoras tubulares de 36/25mm, barra Boss 302 y Panhard Whiteline.</p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-colors">
+            <div class="w-10 h-10 rounded-xl bg-ruby/20 border border-ruby-bright/40 flex items-center justify-center font-mono text-sm font-bold text-ruby-bright mb-4">
+              03
+            </div>
+            <h3 data-i18n="pillar_3_title" class="font-display font-bold text-2xl uppercase text-pearl mb-2">Flujo y Acústica V6</h3>
+            <p data-i18n="pillar_3_desc" class="text-sm text-titanium leading-relaxed">Respiración optimizada con admisión Airaid MXP, mariposa BBK de 73mm, colectores cortos cerámicos BBK, tramo intermedio H-Pipe y 4 salidas traseras.</p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-colors">
+            <div class="w-10 h-10 rounded-xl bg-ruby/20 border border-ruby-bright/40 flex items-center justify-center font-mono text-sm font-bold text-ruby-bright mb-4">
+              04
+            </div>
+            <h3 data-i18n="pillar_4_title" class="font-display font-bold text-2xl uppercase text-pearl mb-2">Frenada y Pisada</h3>
+            <p data-i18n="pillar_4_desc" class="text-sm text-titanium leading-relaxed">Discos perforados y ranurados (315mm delante / 300mm detrás) acompañados de neumáticos Pirelli P Zero en doble medida: 255/40 R19 y 275/40 R19.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 02: CURATED GALLERY -->
+  <section id="gallery" class="py-20 sm:py-28 border-b border-white/10 bg-graphite/35">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <div>
+          <div class="font-mono text-xs uppercase tracking-[0.25em] text-ruby-bright mb-3">
+            02 // <span data-i18n="gal_tag">ARCHIVO VISUAL CURADO</span>
+          </div>
+          <h2 data-i18n="gal_title" class="font-display font-extrabold text-4xl sm:text-5xl uppercase tracking-tight text-pearl leading-none">ESTÉTICA E INGENIERÍA AL DETALLE</h2>
+        </div>
+
+        <!-- Privacy & Batch Photo Loader Notice -->
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="px-3.5 py-2 rounded-xl bg-graphite border border-white/10 flex items-center gap-2 text-xs text-titanium">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span data-i18n="privacy_badge">Protección de matrícula activa en vista trasera</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gallery Grid (6 Curated Slots) -->
+      <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <article class="group rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/60 overflow-hidden flex flex-col transition-all duration-300">
+            <!-- Media Viewport -->
+            <div class="relative aspect-[16/10] bg-obsidian overflow-hidden border-b border-white/10">
+              <div class="w-full h-full flex items-center justify-center relative group-hover:scale-105 transition-transform duration-500">
+               <svg viewBox="0 0 400 240" class="w-full h-full" fill="none"><rect width="400" height="240" fill="#101114"></rect><path d="M35 162 L62 156 L88 126 L152 118 L212 88 L295 88 L352 122 L378 134 L374 162 L336 162 C336 140 302 140 302 162 L116 162 C116 140 82 140 82 162 Z" stroke="#D41C2C" stroke-width="2"></path><circle cx="99" cy="162" r="22" stroke="#F5F5F7" stroke-width="1.5"></circle><circle cx="319" cy="162" r="22" stroke="#F5F5F7" stroke-width="1.5"></circle><line x1="20" y1="186" x2="380" y2="186" stroke="#8E929B" stroke-opacity="0.35"></line></svg>
+               <div class="absolute bottom-3 left-3 px-2.5 py-1 rounded-md bg-obsidian/85 border border-white/10 font-mono text-[10px] text-titanium">
+                 REF: IMG_4598.heic
+               </div>
+             </div>
+              <div class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-obsidian/85 backdrop-blur-md border border-white/10 font-mono text-[10px] uppercase tracking-wider text-ruby-bright">
+                ESTÉTICA &amp; POSTURA
+              </div>
+              <!-- Quick Overlay Controls -->
+              <div class="absolute top-3 right-3 flex items-center gap-1.5">
+                <button onclick="openLightbox(0)" class="px-2.5 py-1.5 rounded-lg bg-obsidian/85 hover:bg-ruby-bright backdrop-blur-md border border-white/15 text-pearl font-mono text-[10px] uppercase tracking-wider transition-colors">
+                  Ampliar
+                </button>
+              </div>
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="font-mono text-[11px] text-titanium mb-1">01 // SIDE PROFILE</div>
+                <h3 class="font-display font-bold text-2xl uppercase text-pearl mb-2 group-hover:text-ruby-bright transition-colors">
+                  Perfil Completo &amp; Caída Eibach
+                </h3>
+                <p class="text-sm text-titanium leading-relaxed mb-4">
+                  Línea lateral limpia bajo luz natural mostrando la altura del kit Eibach Pro-Kit, scoops laterales y llantas Dark Horse 2025.
+                </p>
+              </div>
+
+              <div class="pt-3 border-t border-white/10 flex items-center justify-between gap-2">
+                <span class="font-mono text-[11px] text-titanium/80 truncate">IMG_4598.heic</span>
+                <label class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-obsidian hover:bg-carbon border border-white/10 text-xs font-mono text-pearl transition-colors">
+                  <svg class="w-3.5 h-3.5 text-ruby-bright" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                  <span>Cargar foto</span>
+                  <input type="file" accept="image/*" class="hidden" onchange="handleGalleryUpload(event, 0)">
+                </label>
+              </div>
+            </div>
+          </article>
+        
+          <article class="group rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/60 overflow-hidden flex flex-col transition-all duration-300">
+            <!-- Media Viewport -->
+            <div class="relative aspect-[16/10] bg-obsidian overflow-hidden border-b border-white/10">
+              <div class="w-full h-full flex items-center justify-center relative group-hover:scale-105 transition-transform duration-500">
+               <svg viewBox="0 0 400 240" class="w-full h-full" fill="none"><rect width="400" height="240" fill="#101114"></rect><path d="M75 155 L95 108 L145 84 L255 84 L305 108 L325 155 L305 174 L95 174 Z" stroke="#D41C2C" stroke-width="2"></path><circle cx="132" cy="134" r="14" stroke="#F5F5F7" stroke-width="1.8"></circle><circle cx="268" cy="134" r="14" stroke="#F5F5F7" stroke-width="1.8"></circle><rect x="158" y="124" width="84" height="20" rx="4" stroke="#8E929B" stroke-width="1.2"></rect><path d="M88 176 L312 176" stroke="#D41C2C" stroke-width="3"></path></svg>
+               <div class="absolute bottom-3 left-3 px-2.5 py-1 rounded-md bg-obsidian/85 border border-white/10 font-mono text-[10px] text-titanium">
+                 REF: IMG_3698.jpeg
+               </div>
+             </div>
+              <div class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-obsidian/85 backdrop-blur-md border border-white/10 font-mono text-[10px] uppercase tracking-wider text-ruby-bright">
+                AERODINÁMICA FRONTAL
+              </div>
+              <!-- Quick Overlay Controls -->
+              <div class="absolute top-3 right-3 flex items-center gap-1.5">
+                <button onclick="openLightbox(1)" class="px-2.5 py-1.5 rounded-lg bg-obsidian/85 hover:bg-ruby-bright backdrop-blur-md border border-white/15 text-pearl font-mono text-[10px] uppercase tracking-wider transition-colors">
+                  Ampliar
+                </button>
+              </div>
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="font-mono text-[11px] text-titanium mb-1">02 // FRONT 3/4 AERO</div>
+                <h3 class="font-display font-bold text-2xl uppercase text-pearl mb-2 group-hover:text-ruby-bright transition-colors">
+                  Frontal GT &amp; Capó Shelby GT500
+                </h3>
+                <p class="text-sm text-titanium leading-relaxed mb-4">
+                  Vista tres cuartos delantera limpia (sin placa): lip Roush style, calandra GT con angel eyes y extracción de calor estilo GT500 2020.
+                </p>
+              </div>
+
+              <div class="pt-3 border-t border-white/10 flex items-center justify-between gap-2">
+                <span class="font-mono text-[11px] text-titanium/80 truncate">IMG_3698.jpeg</span>
+                <label class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-obsidian hover:bg-carbon border border-white/10 text-xs font-mono text-pearl transition-colors">
+                  <svg class="w-3.5 h-3.5 text-ruby-bright" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                  <span>Cargar foto</span>
+                  <input type="file" accept="image/*" class="hidden" onchange="handleGalleryUpload(event, 1)">
+                </label>
+              </div>
+            </div>
+          </article>
+        
+          <article class="group rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/60 overflow-hidden flex flex-col transition-all duration-300">
+            <!-- Media Viewport -->
+            <div class="relative aspect-[16/10] bg-obsidian overflow-hidden border-b border-white/10">
+              <div class="w-full h-full flex items-center justify-center relative group-hover:scale-105 transition-transform duration-500">
+               <svg viewBox="0 0 400 240" class="w-full h-full" fill="none"><rect width="400" height="240" fill="#101114"></rect><path d="M70 150 L92 102 L148 80 L252 80 L308 102 L330 150 L312 172 L88 172 Z" stroke="#D41C2C" stroke-width="2"></path><rect x="98" y="120" width="46" height="22" rx="3" stroke="#D41C2C" stroke-width="1.5"></rect><rect x="256" y="120" width="46" height="22" rx="3" stroke="#D41C2C" stroke-width="1.5"></rect><rect x="172" y="124" width="56" height="16" rx="2" fill="#0A0A0C" stroke="#D41C2C" stroke-width="1.2"></rect><circle cx="114" cy="168" r="7" stroke="#F5F5F7"></circle><circle cx="132" cy="168" r="7" stroke="#F5F5F7"></circle><circle cx="268" cy="168" r="7" stroke="#F5F5F7"></circle><circle cx="286" cy="168" r="7" stroke="#F5F5F7"></circle></svg>
+               <div class="absolute bottom-3 left-3 px-2.5 py-1 rounded-md bg-obsidian/85 border border-white/10 font-mono text-[10px] text-titanium">
+                 REF: IMG_3687.jpeg
+               </div>
+             </div>
+              <div class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-obsidian/85 backdrop-blur-md border border-white/10 font-mono text-[10px] uppercase tracking-wider text-ruby-bright">
+                ESCAPE &amp; PRIVACIDAD
+              </div>
+              <!-- Quick Overlay Controls -->
+              <div class="absolute top-3 right-3 flex items-center gap-1.5">
+                <button onclick="openLightbox(2)" class="px-2.5 py-1.5 rounded-lg bg-obsidian/85 hover:bg-ruby-bright backdrop-blur-md border border-white/15 text-pearl font-mono text-[10px] uppercase tracking-wider transition-colors">
+                  Ampliar
+                </button>
+              </div>
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="font-mono text-[11px] text-titanium mb-1">03 // REAR 3/4 &amp; QUAD EXHAUST</div>
+                <h3 class="font-display font-bold text-2xl uppercase text-pearl mb-2 group-hover:text-ruby-bright transition-colors">
+                  Zaga GT500 &amp; 4 Salidas de Escape
+                </h3>
+                <p class="text-sm text-titanium leading-relaxed mb-4">
+                  Difusor trasero Shelby GT500 2014, tramo final recto con 4 salidas y máscara de privacidad aplicada sobre la matrícula.
+                </p>
+              </div>
+
+              <div class="pt-3 border-t border-white/10 flex items-center justify-between gap-2">
+                <span class="font-mono text-[11px] text-titanium/80 truncate">IMG_3687.jpeg</span>
+                <label class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-obsidian hover:bg-carbon border border-white/10 text-xs font-mono text-pearl transition-colors">
+                  <svg class="w-3.5 h-3.5 text-ruby-bright" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                  <span>Cargar foto</span>
+                  <input type="file" accept="image/*" class="hidden" onchange="handleGalleryUpload(event, 2)">
+                </label>
+              </div>
+            </div>
+          </article>
+        
+          <article class="group rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/60 overflow-hidden flex flex-col transition-all duration-300">
+            <!-- Media Viewport -->
+            <div class="relative aspect-[16/10] bg-obsidian overflow-hidden border-b border-white/10">
+              <div class="w-full h-full flex items-center justify-center relative group-hover:scale-105 transition-transform duration-500">
+               <svg viewBox="0 0 400 240" class="w-full h-full" fill="none"><rect width="400" height="240" fill="#101114"></rect><path d="M55 98 Q200 72 345 98 L340 112 Q200 88 60 112 Z" stroke="#D41C2C" stroke-width="2" fill="#1C1E24"></path><rect x="145" y="114" width="110" height="64" rx="8" stroke="#F5F5F7" stroke-width="1.5"></rect><path d="M255 135 C295 135 305 155 330 155" stroke="#8E929B" stroke-width="6" stroke-linecap="round"></path><circle cx="55" cy="105" r="14" stroke="#F5F5F7"></circle><circle cx="345" cy="105" r="14" stroke="#F5F5F7"></circle></svg>
+               <div class="absolute bottom-3 left-3 px-2.5 py-1 rounded-md bg-obsidian/85 border border-white/10 font-mono text-[10px] text-titanium">
+                 REF: IMG_3138.heic
+               </div>
+             </div>
+              <div class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-obsidian/85 backdrop-blur-md border border-white/10 font-mono text-[10px] uppercase tracking-wider text-ruby-bright">
+                INGENIERÍA MOTOR
+              </div>
+              <!-- Quick Overlay Controls -->
+              <div class="absolute top-3 right-3 flex items-center gap-1.5">
+                <button onclick="openLightbox(3)" class="px-2.5 py-1.5 rounded-lg bg-obsidian/85 hover:bg-ruby-bright backdrop-blur-md border border-white/15 text-pearl font-mono text-[10px] uppercase tracking-wider transition-colors">
+                  Ampliar
+                </button>
+              </div>
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="font-mono text-[11px] text-titanium mb-1">04 // ENGINE BAY</div>
+                <h3 class="font-display font-bold text-2xl uppercase text-pearl mb-2 group-hover:text-ruby-bright transition-colors">
+                  Vano Motor Cyclone 3.7L V6
+                </h3>
+                <p class="text-sm text-titanium leading-relaxed mb-4">
+                  Barra de torretas Ford Performance Boss 302, kit de admisión Airaid MXP con filtro cónico y mariposa BBK 73mm.
+                </p>
+              </div>
+
+              <div class="pt-3 border-t border-white/10 flex items-center justify-between gap-2">
+                <span class="font-mono text-[11px] text-titanium/80 truncate">IMG_3138.heic</span>
+                <label class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-obsidian hover:bg-carbon border border-white/10 text-xs font-mono text-pearl transition-colors">
+                  <svg class="w-3.5 h-3.5 text-ruby-bright" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                  <span>Cargar foto</span>
+                  <input type="file" accept="image/*" class="hidden" onchange="handleGalleryUpload(event, 3)">
+                </label>
+              </div>
+            </div>
+          </article>
+        
+          <article class="group rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/60 overflow-hidden flex flex-col transition-all duration-300">
+            <!-- Media Viewport -->
+            <div class="relative aspect-[16/10] bg-obsidian overflow-hidden border-b border-white/10">
+              <div class="w-full h-full flex items-center justify-center relative group-hover:scale-105 transition-transform duration-500">
+               <svg viewBox="0 0 400 240" class="w-full h-full" fill="none"><rect width="400" height="240" fill="#101114"></rect><path d="M70 110 C110 55 290 55 330 110" stroke="#D41C2C" stroke-width="3"></path><circle cx="200" cy="135" r="68" stroke="#F5F5F7" stroke-width="2"></circle><circle cx="200" cy="135" r="50" stroke="#8E929B" stroke-width="1.5"></circle><circle cx="200" cy="135" r="14" stroke="#D41C2C" stroke-width="2"></circle><line x1="200" y1="85" x2="200" y2="185" stroke="#8E929B"></line><line x1="150" y1="135" x2="250" y2="135" stroke="#8E929B"></line><line x1="165" y1="100" x2="235" y2="170" stroke="#8E929B"></line><line x1="235" y1="100" x2="165" y2="170" stroke="#8E929B"></line></svg>
+               <div class="absolute bottom-3 left-3 px-2.5 py-1 rounded-md bg-obsidian/85 border border-white/10 font-mono text-[10px] text-titanium">
+                 REF: IMG_4964.heic
+               </div>
+             </div>
+              <div class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-obsidian/85 backdrop-blur-md border border-white/10 font-mono text-[10px] uppercase tracking-wider text-ruby-bright">
+                RUEDA &amp; CARROCERÍA
+              </div>
+              <!-- Quick Overlay Controls -->
+              <div class="absolute top-3 right-3 flex items-center gap-1.5">
+                <button onclick="openLightbox(4)" class="px-2.5 py-1.5 rounded-lg bg-obsidian/85 hover:bg-ruby-bright backdrop-blur-md border border-white/15 text-pearl font-mono text-[10px] uppercase tracking-wider transition-colors">
+                  Ampliar
+                </button>
+              </div>
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="font-mono text-[11px] text-titanium mb-1">05 // WHEEL &amp; FINISH</div>
+                <h3 class="font-display font-bold text-2xl uppercase text-pearl mb-2 group-hover:text-ruby-bright transition-colors">
+                  Llantas Dark Horse &amp; Ruby Red
+                </h3>
+                <p class="text-sm text-titanium leading-relaxed mb-4">
+                  Detalle del contraste entre el acabado antracita de las llantas Mustang Dark Horse 2025, neumáticos Pirelli P Zero y el lip frontal.
+                </p>
+              </div>
+
+              <div class="pt-3 border-t border-white/10 flex items-center justify-between gap-2">
+                <span class="font-mono text-[11px] text-titanium/80 truncate">IMG_4964.heic</span>
+                <label class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-obsidian hover:bg-carbon border border-white/10 text-xs font-mono text-pearl transition-colors">
+                  <svg class="w-3.5 h-3.5 text-ruby-bright" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                  <span>Cargar foto</span>
+                  <input type="file" accept="image/*" class="hidden" onchange="handleGalleryUpload(event, 4)">
+                </label>
+              </div>
+            </div>
+          </article>
+        
+          <article class="group rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/60 overflow-hidden flex flex-col transition-all duration-300">
+            <!-- Media Viewport -->
+            <div class="relative aspect-[16/10] bg-obsidian overflow-hidden border-b border-white/10">
+              <div class="w-full h-full flex items-center justify-center relative group-hover:scale-105 transition-transform duration-500">
+               <svg viewBox="0 0 400 240" class="w-full h-full" fill="none"><rect width="400" height="240" fill="#101114"></rect><rect x="172" y="32" width="18" height="75" rx="3" fill="#EAB308" fill-opacity="0.85"></rect><circle cx="200" cy="132" r="64" stroke="#F5F5F7" stroke-width="1.8"></circle><circle cx="200" cy="132" r="44" stroke="#D41C2C" stroke-width="1.5" stroke-dasharray="4 4"></circle><path d="M142 108 L158 108 L158 156 L142 156 Z" stroke="#8E929B" stroke-width="2"></path></svg>
+               <div class="absolute bottom-3 left-3 px-2.5 py-1 rounded-md bg-obsidian/85 border border-white/10 font-mono text-[10px] text-titanium">
+                 REF: IMG_4592.heic
+               </div>
+             </div>
+              <div class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-obsidian/85 backdrop-blur-md border border-white/10 font-mono text-[10px] uppercase tracking-wider text-ruby-bright">
+                CHASIS &amp; FRENADA
+              </div>
+              <!-- Quick Overlay Controls -->
+              <div class="absolute top-3 right-3 flex items-center gap-1.5">
+                <button onclick="openLightbox(5)" class="px-2.5 py-1.5 rounded-lg bg-obsidian/85 hover:bg-ruby-bright backdrop-blur-md border border-white/15 text-pearl font-mono text-[10px] uppercase tracking-wider transition-colors">
+                  Ampliar
+                </button>
+              </div>
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="font-mono text-[11px] text-titanium mb-1">06 // SUSPENSION &amp; BRAKES</div>
+                <h3 class="font-display font-bold text-2xl uppercase text-pearl mb-2 group-hover:text-ruby-bright transition-colors">
+                  Bilstein B6 &amp; Discos Perforados
+                </h3>
+                <p class="text-sm text-titanium leading-relaxed mb-4">
+                  Vista técnica tras los radios: amortiguador Bilstein B6 Performance y discos perforados y ranurados de 315mm.
+                </p>
+              </div>
+
+              <div class="pt-3 border-t border-white/10 flex items-center justify-between gap-2">
+                <span class="font-mono text-[11px] text-titanium/80 truncate">IMG_4592.heic</span>
+                <label class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-obsidian hover:bg-carbon border border-white/10 text-xs font-mono text-pearl transition-colors">
+                  <svg class="w-3.5 h-3.5 text-ruby-bright" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                  <span>Cargar foto</span>
+                  <input type="file" accept="image/*" class="hidden" onchange="handleGalleryUpload(event, 5)">
+                </label>
+              </div>
+            </div>
+          </article>
+        </div>
+    </div>
+  </section>
+
+  <!-- SECTION 03: OFFICIAL BUILD SHEET / FICHA TÉCNICA -->
+  <section id="specs" class="py-20 sm:py-28 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
+        <div>
+          <div class="font-mono text-xs uppercase tracking-[0.25em] text-ruby-bright mb-3">
+            03 // <span data-i18n="specs_tag">ESPECIFICACIONES OFICIALES</span>
+          </div>
+          <h2 data-i18n="specs_title" class="font-display font-extrabold text-4xl sm:text-5xl uppercase tracking-tight text-pearl leading-none">FICHA TÉCNICA COMPLETA</h2>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="flex flex-wrap gap-2" role="tablist">
+          <button onclick="filterSpecs('all')" id="tab-all" class="spec-tab px-4 py-2 rounded-xl font-mono text-xs uppercase tracking-wider transition-all bg-ruby-bright text-white">
+            <span data-i18n="tab_all">Todo el Proyecto (21)</span>
+          </button>
+          <button onclick="filterSpecs('performance')" id="tab-performance" class="spec-tab px-4 py-2 rounded-xl font-mono text-xs uppercase tracking-wider transition-all bg-graphite text-titanium hover:text-pearl border border-white/10">
+            <span data-i18n="tab_perf">Performance &amp; Chasis (11)</span>
+          </button>
+          <button onclick="filterSpecs('exterior')" id="tab-exterior" class="spec-tab px-4 py-2 rounded-xl font-mono text-xs uppercase tracking-wider transition-all bg-graphite text-titanium hover:text-pearl border border-white/10">
+            <span data-i18n="tab_ext">Estética Exterior (7)</span>
+          </button>
+          <button onclick="filterSpecs('interior')" id="tab-interior" class="spec-tab px-4 py-2 rounded-xl font-mono text-xs uppercase tracking-wider transition-all bg-graphite text-titanium hover:text-pearl border border-white/10">
+            <span data-i18n="tab_int">Interior &amp; Tech (3)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Specs List Container -->
+      <div id="specs-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  PERFORMANCE &amp; CHASIS
+                </span>
+                <span class="font-mono text-xs text-titanium/70">PERF-01</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                Suspensión Bilstein B6 Performance + Muelles Eibach Pro-Kit
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                Amortiguación deportiva monotubo combinada con reducción progresiva del centro de gravedad.
+              </p>
+            </div>
+          </div>
+        
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  PERFORMANCE &amp; CHASIS
+                </span>
+                <span class="font-mono text-xs text-titanium/70">PERF-02</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                Barra de Torretas Ford Performance Boss 302
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                Refuerzo estructural entre copelas delanteras para máxima precisión en entrada a curva.
+              </p>
+            </div>
+          </div>
+        
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  PERFORMANCE &amp; CHASIS
+                </span>
+                <span class="font-mono text-xs text-titanium/70">PERF-03</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                Estabilizadoras Tubulares Eibach Anti-Roll (36mm / 25mm)
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                Control activo del balanceo de carrocería mediante barras huecas de alta rigidez torsional.
+              </p>
+            </div>
+          </div>
+        
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  PERFORMANCE &amp; CHASIS
+                </span>
+                <span class="font-mono text-xs text-titanium/70">PERF-04</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                Barra Panhard / Torsión Ajustable Whiteline
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                Centrado milimétrico del eje rígido trasero tras el rebaje de altura y eliminación de flexión lateral.
+              </p>
+            </div>
+          </div>
+        
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  PERFORMANCE &amp; CHASIS
+                </span>
+                <span class="font-mono text-xs text-titanium/70">PERF-05</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                Kit de Admisión Airaid MXP con Filtro Cónico Airaid
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                Caja cerrada de alto flujo con toma dinámica y filtro cónico lavable de baja restricción.
+              </p>
+            </div>
+          </div>
+        
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  PERFORMANCE &amp; CHASIS
+                </span>
+                <span class="font-mono text-xs text-titanium/70">PERF-06</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                Mariposa de Admisión BBK 73mm
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                Cuerpo de aceleración mecanizado en aluminio CNC para una respuesta inmediata al acelerador.
+              </p>
+            </div>
+          </div>
+        
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  PERFORMANCE &amp; CHASIS
+                </span>
+                <span class="font-mono text-xs text-titanium/70">PERF-07</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                Colectores Cortos Cerámicos BBK
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                Colectores tubulares con recubrimiento cerámico térmico para optimizar evacuación y temperatura bajo capó.
+              </p>
+            </div>
+          </div>
+        
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  PERFORMANCE &amp; CHASIS
+                </span>
+                <span class="font-mono text-xs text-titanium/70">PERF-08</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                Tramo Intermedio H-Pipe
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                Compensación de pulsos entre bancadas del V6 para un tono profundo, muscular y sin resonancias.
+              </p>
+            </div>
+          </div>
+        
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  PERFORMANCE &amp; CHASIS
+                </span>
+                <span class="font-mono text-xs text-titanium/70">PERF-09</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                Tramo Final Recto con 4 Salidas de Escape
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                Configuración trasera de flujo directo con cuatro colas integradas en el difusor GT500.
+              </p>
+            </div>
+          </div>
+        
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  PERFORMANCE &amp; CHASIS
+                </span>
+                <span class="font-mono text-xs text-titanium/70">PERF-10</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                Discos de Freno Perforados y Ranurados (315mm / 300mm)
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                Mayor disipación térmica y evacuación de gases en frenadas exigentes.
+              </p>
+            </div>
+          </div>
+        
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  PERFORMANCE &amp; CHASIS
+                </span>
+                <span class="font-mono text-xs text-titanium/70">PERF-11</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                Neumáticos Pirelli P Zero (255/40 R19 &amp; 275/40 R19)
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                Configuración escalonada UHP para maximizar motricidad trasera y precisión direccional.
+              </p>
+            </div>
+          </div>
+        
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  ESTÉTICA EXTERIOR
+                </span>
+                <span class="font-mono text-xs text-titanium/70">EXT-01</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                Capó Estilo Shelby GT500 2020
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                Extracción central de aire caliente con rejillas funcionales y nervaduras musculosas.
+              </p>
+            </div>
+          </div>
+        
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  ESTÉTICA EXTERIOR
+                </span>
+                <span class="font-mono text-xs text-titanium/70">EXT-02</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                Calandra Mustang GT 2013–2014 + Angel Eyes
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                Parrilla superior de nido de abeja con proyectores antiniebla integrados y firma lumínica LED.
+              </p>
+            </div>
+          </div>
+        
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  ESTÉTICA EXTERIOR
+                </span>
+                <span class="font-mono text-xs text-titanium/70">EXT-03</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                Lip Frontal Roush Style
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                Splitter inferior en negro satinado que rebaja visualmente el morro y canaliza el flujo frontal.
+              </p>
+            </div>
+          </div>
+        
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  ESTÉTICA EXTERIOR
+                </span>
+                <span class="font-mono text-xs text-titanium/70">EXT-04</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                Llantas Ford Mustang Dark Horse 2025
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                Diseño multirradio en acabado antracita oscuro de 19 pulgadas con tapa central Pony.
+              </p>
+            </div>
+          </div>
+        
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  ESTÉTICA EXTERIOR
+                </span>
+                <span class="font-mono text-xs text-titanium/70">EXT-05</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                Techo Panorámico de Cristal
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                Equipamiento exclusivo S197 que aporta luminosidad interior y continuidad visual en negro brillante.
+              </p>
+            </div>
+          </div>
+        
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  ESTÉTICA EXTERIOR
+                </span>
+                <span class="font-mono text-xs text-titanium/70">EXT-06</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                Scoops en Ventanillas Laterales
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                Tomas laterales estilo fastback clásico pintadas a juego con los detalles en negro.
+              </p>
+            </div>
+          </div>
+        
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  ESTÉTICA EXTERIOR
+                </span>
+                <span class="font-mono text-xs text-titanium/70">EXT-07</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                Difusor Trasero Shelby GT500 2014
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                Faldón trasero aerodinámico diseñado para alojar las cuatro salidas de escape.
+              </p>
+            </div>
+          </div>
+        
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  INTERIOR &amp; TECH
+                </span>
+                <span class="font-mono text-xs text-titanium/70">INT-01</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                Volante Deportivo Ergonómico
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                Aro perfilado de mayor grosor y agarre directo para una conexión pura con la dirección.
+              </p>
+            </div>
+          </div>
+        
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  INTERIOR &amp; TECH
+                </span>
+                <span class="font-mono text-xs text-titanium/70">INT-02</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                Molduras de Salpicadero en Fibra de Carbono
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                Acabado técnico en carbono real/tejido sobre consola y paneles frontales del habitáculo.
+              </p>
+            </div>
+          </div>
+        
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  INTERIOR &amp; TECH
+                </span>
+                <span class="font-mono text-xs text-titanium/70">INT-03</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                Unidad Multimedia Dynavin N7 Pro
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                Integración OEM específica para Mustang S197 con navegación, telemetría y conectividad moderna.
+              </p>
+            </div>
+          </div>
+        </div>
+    </div>
+  </section>
+
+  <!-- SECTION 04: STUDIO & DEPLOYMENT WORKFLOW (For Instagram Bio & Privacy) -->
+  <section id="studio-tools" class="py-16 sm:py-24 bg-graphite/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="p-6 sm:p-10 rounded-3xl bg-graphite border border-white/10 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-72 h-72 bg-ruby/15 blur-[90px] pointer-events-none"></div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+          <div class="lg:col-span-8">
+            <div class="font-mono text-xs uppercase tracking-[0.22em] text-ruby-bright mb-2">
+              04 // <span data-i18n="deploy_tag">PREPARACIÓN PARA PUBLICACIÓN</span>
+            </div>
+            <h3 data-i18n="deploy_title" class="font-display font-bold text-3xl sm:text-4xl uppercase text-pearl mb-3">LISTA PARA TU BIO DE INSTAGRAM</h3>
+            <p data-i18n="deploy_desc" class="text-sm sm:text-base text-titanium leading-relaxed max-w-2xl mb-6">Puedes vincular tus fotografías directamente desde las tarjetas de la galería (incluida la vista trasera, a la que se le aplica automáticamente una placa negra THE 3.7 CYCLONE sobre la matrícula) y descargar el archivo index.html autocontenido listo para alojar en Netlify, Vercel o GitHub Pages.</p>
+            <div class="flex flex-wrap gap-3">
+              <button onclick="downloadStandaloneHTML()" class="px-6 py-3.5 rounded-xl bg-ruby-bright hover:bg-ruby text-white font-display font-bold uppercase tracking-wider text-base transition-all ruby-border-glow flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                <span data-i18n="btn_download">Descargar Web Lista (index.html)</span>
+              </button>
+              <button onclick="copyProjectHandle()" class="px-5 py-3.5 rounded-xl bg-obsidian hover:bg-carbon text-pearl border border-white/15 font-mono text-xs uppercase tracking-wider transition-all flex items-center gap-2">
+                <span id="copy-label" data-i18n="btn_copy_title">Copiar Título Oficial</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="lg:col-span-4">
+            <div class="p-5 rounded-2xl bg-obsidian border border-white/10 space-y-3">
+              <div class="font-mono text-xs uppercase tracking-widest text-titanium border-b border-white/10 pb-2">
+                CHECKLIST DE LANZAMIENTO
+              </div>
+              <div class="flex items-center gap-2.5 text-xs text-pearl">
+                <span class="text-emerald-400 font-bold">✓</span>
+                <span data-i18n="chk_1">Identidad Negro / Grafito / Ruby Red</span>
+              </div>
+              <div class="flex items-center gap-2.5 text-xs text-pearl">
+                <span class="text-emerald-400 font-bold">✓</span>
+                <span data-i18n="chk_2">Selector bilingüe ES / EN en tiempo real</span>
+              </div>
+              <div class="flex items-center gap-2.5 text-xs text-pearl">
+                <span class="text-emerald-400 font-bold">✓</span>
+                <span data-i18n="chk_3">21 modificaciones técnicas verificadas</span>
+              </div>
+              <div class="flex items-center gap-2.5 text-xs text-pearl">
+                <span class="text-emerald-400 font-bold">✓</span>
+                <span data-i18n="chk_4">Máscara de privacidad en matrícula trasera</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="py-10 border-t border-white/10 bg-obsidian">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <span class="w-2.5 h-2.5 rounded-full bg-ruby-bright"></span>
+        <span class="font-display font-bold uppercase tracking-wider text-pearl">THE 3.7 CYCLONE PROJECT</span>
+        <span class="font-mono text-xs text-titanium">// 2014 FORD MUSTANG V6 S197</span>
+      </div>
+      <div class="font-mono text-xs text-titanium" data-i18n="footer_note">Dossier Técnico &amp; Presentación Oficial · Ruby Red Edition</div>
+    </div>
+  </footer>
+
+  <!-- LIGHTBOX MODAL -->
+  <div id="lightbox" class="fixed inset-0 z-50 hidden bg-obsidian/95 backdrop-blur-lg flex items-center justify-center p-4 sm:p-8" onclick="closeLightbox(event)">
+    <div class="relative max-w-5xl w-full bg-graphite border border-white/15 rounded-3xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-white/10">
+        <div>
+          <span id="lb-code" class="font-mono text-xs text-ruby-bright uppercase tracking-widest">PHOTO 01</span>
+          <h4 id="lb-title" class="font-display font-bold text-2xl uppercase text-pearl">Título</h4>
+        </div>
+        <button onclick="closeLightbox()" class="w-10 h-10 rounded-xl bg-obsidian hover:bg-ruby-bright text-pearl flex items-center justify-center transition-colors" aria-label="Cerrar">
+          ✕
+        </button>
+      </div>
+      <div class="relative bg-obsidian flex items-center justify-center max-h-[72vh] overflow-hidden">
+        <img id="lb-img" src="" alt="" class="max-h-[72vh] w-auto object-contain">
+        <!-- Optional Show Plate Privacy Mask in Lightbox for Rear Photo -->
+        <div id="lb-plate-mask" class="hidden absolute bottom-[21%] left-[68.5%] -translate-x-1/2 px-3 py-1 rounded bg-obsidian/95 border border-ruby-bright/70 shadow-lg pointer-events-none">
+          <span class="font-mono text-[10px] sm:text-xs font-bold tracking-widest text-pearl">3.7 CYCLONE</span>
+        </div>
+      </div>
+      <div class="px-6 py-4 bg-graphite border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <p id="lb-caption" class="text-sm text-titanium"></p>
+        <span id="lb-file" class="font-mono text-xs text-titanium/70"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION (Replaces alert()) -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="px-5 py-3.5 rounded-2xl bg-graphite border border-ruby-bright/60 text-pearl shadow-2xl flex items-center gap-3">
+      <span class="w-2.5 h-2.5 rounded-full bg-ruby-bright"></span>
+      <span id="toast-msg" class="font-mono text-xs"></span>
+    </div>
+  </div>
+
+  <script>
+    // Current language state ('es' | 'en')
+    let currentLang = 'es';
+    let currentFilter = 'all';
+
+    // Bilingual UI Dictionary
+    const i18n = {
+      es: {
+        nav_philosophy: 'Filosofía',
+        nav_gallery: 'Galería',
+        nav_specs: 'Ficha Técnica',
+        nav_publish: 'Publicación',
+        hero_subtitle: 'Ingeniería atmosférica, dinámica de chasis y estética OEM+ sobre la última evolución de la plataforma S197.',
+        hero_cta_specs: 'Explorar Ficha Técnica',
+        hero_cta_gallery: 'Ver Galería',
+        hero_upload_btn: 'Portada (IMG_3688)',
+        stat_engine_label: 'Motorización',
+        stat_power_label: 'Potencia Base + Admisión',
+        stat_chassis_label: 'Puesta a Punto Chasis',
+        stat_wheels_label: 'Set de Llantas & Gomas',
+        phil_tag: 'CONCEPTO DEL PROYECTO',
+        phil_title: 'PRECISIÓN DE CHASIS Y CARÁCTER ATMOSFÉRICO',
+        phil_p1: 'THE 3.7 CYCLONE PROJECT nace con una premisa clara: desarrollar un Mustang S197 2014 con criterio de ingeniería y coherencia estética, alejado de artificios genéricos.',
+        phil_p2: 'Cada componente instalado responde a un equilibrio real entre comportamiento dinámico en curva, acústica pura de seis cilindros en V con línea completa de escape y una presencia exterior inspirada en las ediciones más icónicas de Ford Performance.',
+        pillar_1_title: 'Identidad Ruby Red',
+        pillar_1_desc: 'Acabado tricapa Ruby Red Metallic combinado con franjas negras, capó estilo Shelby GT500 2020, frontal GT con angel eyes y llantas Dark Horse 2025 en antracita.',
+        pillar_2_title: 'Dinámica S197',
+        pillar_2_desc: 'Eje rígido trasero controlado mediante amortiguación Bilstein B6, muelles Eibach Pro-Kit, estabilizadoras tubulares de 36/25mm, barra Boss 302 y Panhard Whiteline.',
+        pillar_3_title: 'Flujo y Acústica V6',
+        pillar_3_desc: 'Respiración optimizada con admisión Airaid MXP, mariposa BBK de 73mm, colectores cortos cerámicos BBK, tramo intermedio H-Pipe y 4 salidas traseras.',
+        pillar_4_title: 'Frenada y Pisada',
+        pillar_4_desc: 'Discos perforados y ranurados (315mm delante / 300mm detrás) acompañados de neumáticos Pirelli P Zero en doble medida: 255/40 R19 y 275/40 R19.',
+        gal_tag: 'ARCHIVO VISUAL CURADO',
+        gal_title: 'ESTÉTICA E INGENIERÍA AL DETALLE',
+        privacy_badge: 'Protección de matrícula activa en vista trasera',
+        specs_tag: 'ESPECIFICACIONES OFICIALES',
+        specs_title: 'FICHA TÉCNICA COMPLETA',
+        tab_all: 'Todo el Proyecto (21)',
+        tab_perf: 'Performance & Chasis (11)',
+        tab_ext: 'Estética Exterior (7)',
+        tab_int: 'Interior & Tech (3)',
+        deploy_tag: 'PREPARACIÓN PARA PUBLICACIÓN',
+        deploy_title: 'LISTA PARA TU BIO DE INSTAGRAM',
+        deploy_desc: 'Puedes vincular tus fotografías directamente desde las tarjetas de la galería (incluida la vista trasera, a la que se le aplica automáticamente una placa negra THE 3.7 CYCLONE sobre la matrícula) y descargar el archivo index.html autocontenido listo para alojar en Netlify, Vercel o GitHub Pages.',
+        btn_download: 'Descargar Web Lista (index.html)',
+        btn_copy_title: 'Copiar Título Oficial',
+        chk_1: 'Identidad Negro / Grafito / Ruby Red',
+        chk_2: 'Selector bilingüe ES / EN en tiempo real',
+        chk_3: '21 modificaciones técnicas verificadas',
+        chk_4: 'Máscara de privacidad en matrícula trasera',
+        footer_note: 'Dossier Técnico & Presentación Oficial · Ruby Red Edition',
+        load_photo: 'Cargar foto',
+        inspect_photo: 'Ampliar',
+        cat_performance: 'PERFORMANCE & CHASIS',
+        cat_exterior: 'ESTÉTICA EXTERIOR',
+        cat_interior: 'INTERIOR & TECH'
+      },
+      en: {
+        nav_philosophy: 'Philosophy',
+        nav_gallery: 'Gallery',
+        nav_specs: 'Build Sheet',
+        nav_publish: 'Deployment',
+        hero_subtitle: 'Naturally aspirated engineering, chassis dynamics, and OEM+ styling on the final evolution of the S197 platform.',
+        hero_cta_specs: 'Explore Build Sheet',
+        hero_cta_gallery: 'View Gallery',
+        hero_upload_btn: 'Hero Cover (IMG_3688)',
+        stat_engine_label: 'Powertrain',
+        stat_power_label: 'Base Output + Intake',
+        stat_chassis_label: 'Chassis Setup',
+        stat_wheels_label: 'Wheel & Tire Package',
+        phil_tag: 'PROJECT CONCEPT',
+        phil_title: 'CHASSIS PRECISION & NATURALLY ASPIRATED SOUL',
+        phil_p1: 'THE 3.7 CYCLONE PROJECT was conceived with a single objective: building a 2014 S197 Mustang guided by engineering balance and cohesive OEM+ styling, far removed from generic aftermarket trends.',
+        phil_p2: 'Every component serves a functional purpose—sharpening cornering response, unleashing pure V6 exhaust acoustics through a full header-back system, and honoring iconic Ford Performance design cues.',
+        pillar_1_title: 'Ruby Red Identity',
+        pillar_1_desc: 'Three-stage Ruby Red Metallic paint paired with black racing stripes, 2020 Shelby GT500-style hood, GT grille with angel eyes, and anthracite 2025 Dark Horse wheels.',
+        pillar_2_title: 'S197 Dynamics',
+        pillar_2_desc: 'Live-axle rear geometry dialed in with Bilstein B6 dampers, Eibach Pro-Kit springs, 36mm/25mm tubular sway bars, Boss 302 strut brace, and Whiteline Panhard bar.',
+        pillar_3_title: 'V6 Airflow & Acoustics',
+        pillar_3_desc: 'Enhanced breathing via an Airaid MXP cold air intake, BBK 73mm throttle body, BBK ceramic shorty headers, H-Pipe mid-section, and quad-tip straight exhaust.',
+        pillar_4_title: 'Braking & Stance',
+        pillar_4_desc: 'Drilled and slotted rotors (315mm front / 300mm rear) matched with staggered Pirelli P Zero tires: 255/40 R19 front and 275/40 R19 rear.',
+        gal_tag: 'CURATED VISUAL ARCHIVE',
+        gal_title: 'EXTERIOR & ENGINEERING IN DETAIL',
+        privacy_badge: 'Rear license plate privacy mask active',
+        specs_tag: 'OFFICIAL SPECIFICATIONS',
+        specs_title: 'COMPLETE BUILD SHEET',
+        tab_all: 'Full Build (21)',
+        tab_perf: 'Performance & Chassis (11)',
+        tab_ext: 'Exterior Styling (7)',
+        tab_int: 'Interior & Tech (3)',
+        deploy_tag: 'PUBLICATION WORKFLOW',
+        deploy_title: 'READY FOR YOUR INSTAGRAM BIO',
+        deploy_desc: 'Link your actual photos directly on each gallery card (including the rear 3/4 shot, which automatically applies a clean THE 3.7 CYCLONE privacy mask over the license plate) and download the standalone index.html file ready to host on Netlify, Vercel, or GitHub Pages.',
+        btn_download: 'Download Standalone Web (index.html)',
+        btn_copy_title: 'Copy Official Title',
+        chk_1: 'Black / Graphite / Ruby Red identity',
+        chk_2: 'Real-time ES / EN bilingual toggle',
+        chk_3: '21 verified technical modifications',
+        chk_4: 'Rear license plate privacy mask',
+        footer_note: 'Technical Dossier & Official Presentation · Ruby Red Edition',
+        load_photo: 'Load photo',
+        inspect_photo: 'Inspect',
+        cat_performance: 'PERFORMANCE & CHASSIS',
+        cat_exterior: 'EXTERIOR STYLING',
+        cat_interior: 'INTERIOR & TECH'
+      }
+    };
+
+    // Curated 6-Photo Gallery Architecture
+    const galleryItems = [
+      {
+        id: 'photo-01',
+        code: '01 // SIDE PROFILE',
+        fileRef: 'IMG_4598.heic',
+        titleEs: 'Perfil Completo & Caída Eibach',
+        titleEn: 'Full Side Profile & Eibach Stance',
+        captionEs: 'Línea lateral limpia bajo luz natural mostrando la altura del kit Eibach Pro-Kit, scoops laterales y llantas Dark Horse 2025.',
+        captionEn: 'Clean side silhouette showcasing the Eibach Pro-Kit ride height, side window scoops, and 2025 Dark Horse wheels.',
+        tagEs: 'ESTÉTICA & POSTURA',
+        tagEn: 'STANCE & PROFILE',
+        isRearPlate: false,
+        imgSrc: '',
+        svgDiagram: `<svg viewBox="0 0 400 240" class="w-full h-full" fill="none"><rect width="400" height="240" fill="#101114"/><path d="M35 162 L62 156 L88 126 L152 118 L212 88 L295 88 L352 122 L378 134 L374 162 L336 162 C336 140 302 140 302 162 L116 162 C116 140 82 140 82 162 Z" stroke="#D41C2C" stroke-width="2"/><circle cx="99" cy="162" r="22" stroke="#F5F5F7" stroke-width="1.5"/><circle cx="319" cy="162" r="22" stroke="#F5F5F7" stroke-width="1.5"/><line x1="20" y1="186" x2="380" y2="186" stroke="#8E929B" stroke-opacity="0.35"/></svg>`
+      },
+      {
+        id: 'photo-02',
+        code: '02 // FRONT 3/4 AERO',
+        fileRef: 'IMG_3698.jpeg',
+        titleEs: 'Frontal GT & Capó Shelby GT500',
+        titleEn: 'GT Front End & Shelby GT500 Hood',
+        captionEs: 'Vista tres cuartos delantera limpia (sin placa): lip Roush style, calandra GT con angel eyes y extracción de calor estilo GT500 2020.',
+        captionEn: 'Clean front three-quarter view: Roush-style front lip, GT grille with angel eyes, and 2020 GT500-style heat extractor hood.',
+        tagEs: 'AERODINÁMICA FRONTAL',
+        tagEn: 'FRONT AERO',
+        isRearPlate: false,
+        imgSrc: '',
+        svgDiagram: `<svg viewBox="0 0 400 240" class="w-full h-full" fill="none"><rect width="400" height="240" fill="#101114"/><path d="M75 155 L95 108 L145 84 L255 84 L305 108 L325 155 L305 174 L95 174 Z" stroke="#D41C2C" stroke-width="2"/><circle cx="132" cy="134" r="14" stroke="#F5F5F7" stroke-width="1.8"/><circle cx="268" cy="134" r="14" stroke="#F5F5F7" stroke-width="1.8"/><rect x="158" y="124" width="84" height="20" rx="4" stroke="#8E929B" stroke-width="1.2"/><path d="M88 176 L312 176" stroke="#D41C2C" stroke-width="3"/></svg>`
+      },
+      {
+        id: 'photo-03',
+        code: '03 // REAR 3/4 & QUAD EXHAUST',
+        fileRef: 'IMG_3687.jpeg',
+        titleEs: 'Zaga GT500 & 4 Salidas de Escape',
+        titleEn: 'GT500 Rear Diffuser & Quad Tips',
+        captionEs: 'Difusor trasero Shelby GT500 2014, tramo final recto con 4 salidas y máscara de privacidad aplicada sobre la matrícula.',
+        captionEn: '2014 Shelby GT500 rear diffuser, straight-through quad-tip exhaust, and privacy mask applied over the rear plate.',
+        tagEs: 'ESCAPE & PRIVACIDAD',
+        tagEn: 'EXHAUST & PRIVACY',
+        isRearPlate: true,
+        imgSrc: '',
+        svgDiagram: `<svg viewBox="0 0 400 240" class="w-full h-full" fill="none"><rect width="400" height="240" fill="#101114"/><path d="M70 150 L92 102 L148 80 L252 80 L308 102 L330 150 L312 172 L88 172 Z" stroke="#D41C2C" stroke-width="2"/><rect x="98" y="120" width="46" height="22" rx="3" stroke="#D41C2C" stroke-width="1.5"/><rect x="256" y="120" width="46" height="22" rx="3" stroke="#D41C2C" stroke-width="1.5"/><rect x="172" y="124" width="56" height="16" rx="2" fill="#0A0A0C" stroke="#D41C2C" stroke-width="1.2"/><circle cx="114" cy="168" r="7" stroke="#F5F5F7"/><circle cx="132" cy="168" r="7" stroke="#F5F5F7"/><circle cx="268" cy="168" r="7" stroke="#F5F5F7"/><circle cx="286" cy="168" r="7" stroke="#F5F5F7"/></svg>`
+      },
+      {
+        id: 'photo-04',
+        code: '04 // ENGINE BAY',
+        fileRef: 'IMG_3138.heic',
+        titleEs: 'Vano Motor Cyclone 3.7L V6',
+        titleEn: '3.7L V6 Cyclone Engine Bay',
+        captionEs: 'Barra de torretas Ford Performance Boss 302, kit de admisión Airaid MXP con filtro cónico y mariposa BBK 73mm.',
+        captionEn: 'Ford Performance Boss 302 strut tower brace, Airaid MXP cold air intake with conical filter, and BBK 73mm throttle body.',
+        tagEs: 'INGENIERÍA MOTOR',
+        tagEn: 'ENGINE ARCHITECTURE',
+        isRearPlate: false,
+        imgSrc: '',
+        svgDiagram: `<svg viewBox="0 0 400 240" class="w-full h-full" fill="none"><rect width="400" height="240" fill="#101114"/><path d="M55 98 Q200 72 345 98 L340 112 Q200 88 60 112 Z" stroke="#D41C2C" stroke-width="2" fill="#1C1E24"/><rect x="145" y="114" width="110" height="64" rx="8" stroke="#F5F5F7" stroke-width="1.5"/><path d="M255 135 C295 135 305 155 330 155" stroke="#8E929B" stroke-width="6" stroke-linecap="round"/><circle cx="55" cy="105" r="14" stroke="#F5F5F7"/><circle cx="345" cy="105" r="14" stroke="#F5F5F7"/></svg>`
+      },
+      {
+        id: 'photo-05',
+        code: '05 // WHEEL & FINISH',
+        fileRef: 'IMG_4964.heic',
+        titleEs: 'Llantas Dark Horse & Ruby Red',
+        titleEn: 'Dark Horse Wheels & Ruby Red Finish',
+        captionEs: 'Detalle del contraste entre el acabado antracita de las llantas Mustang Dark Horse 2025, neumáticos Pirelli P Zero y el lip frontal.',
+        captionEn: 'Close-up contrast between anthracite 2025 Mustang Dark Horse wheels, Pirelli P Zero tires, and Ruby Red Metallic bodywork.',
+        tagEs: 'RUEDA & CARROCERÍA',
+        tagEn: 'WHEEL & BODYWORK',
+        isRearPlate: false,
+        imgSrc: '',
+        svgDiagram: `<svg viewBox="0 0 400 240" class="w-full h-full" fill="none"><rect width="400" height="240" fill="#101114"/><path d="M70 110 C110 55 290 55 330 110" stroke="#D41C2C" stroke-width="3"/><circle cx="200" cy="135" r="68" stroke="#F5F5F7" stroke-width="2"/><circle cx="200" cy="135" r="50" stroke="#8E929B" stroke-width="1.5"/><circle cx="200" cy="135" r="14" stroke="#D41C2C" stroke-width="2"/><line x1="200" y1="85" x2="200" y2="185" stroke="#8E929B"/><line x1="150" y1="135" x2="250" y2="135" stroke="#8E929B"/><line x1="165" y1="100" x2="235" y2="170" stroke="#8E929B"/><line x1="235" y1="100" x2="165" y2="170" stroke="#8E929B"/></svg>`
+      },
+      {
+        id: 'photo-06',
+        code: '06 // SUSPENSION & BRAKES',
+        fileRef: 'IMG_4592.heic',
+        titleEs: 'Bilstein B6 & Discos Perforados',
+        titleEn: 'Bilstein B6 & Drilled/Slotted Rotors',
+        captionEs: 'Vista técnica tras los radios: amortiguador Bilstein B6 Performance y discos perforados y ranurados de 315mm.',
+        captionEn: 'Technical behind-the-spoke view: Bilstein B6 Performance damper and 315mm drilled & slotted brake rotors.',
+        tagEs: 'CHASIS & FRENADA',
+        tagEn: 'CHASSIS & BRAKES',
+        isRearPlate: false,
+        imgSrc: '',
+        svgDiagram: `<svg viewBox="0 0 400 240" class="w-full h-full" fill="none"><rect width="400" height="240" fill="#101114"/><rect x="172" y="32" width="18" height="75" rx="3" fill="#EAB308" fill-opacity="0.85"/><circle cx="200" cy="132" r="64" stroke="#F5F5F7" stroke-width="1.8"/><circle cx="200" cy="132" r="44" stroke="#D41C2C" stroke-width="1.5" stroke-dasharray="4 4"/><path d="M142 108 L158 108 L158 156 L142 156 Z" stroke="#8E929B" stroke-width="2"/></svg>`
+      }
+    ];
+
+    // Complete 21-Item Verified Build Sheet (ES & EN)
+    const buildSpecs = [
+      // PERFORMANCE & CHASSIS (11 items)
+      {
+        category: 'performance',
+        code: 'PERF-01',
+        esTitle: 'Suspensión Bilstein B6 Performance + Muelles Eibach Pro-Kit',
+        enTitle: 'Bilstein B6 Performance Dampers + Eibach Pro-Kit Springs',
+        esSub: 'Amortiguación deportiva monotubo combinada con reducción progresiva del centro de gravedad.',
+        enSub: 'Monotube performance damping paired with progressive center-of-gravity lowering.'
+      },
+      {
+        category: 'performance',
+        code: 'PERF-02',
+        esTitle: 'Barra de Torretas Ford Performance Boss 302',
+        enTitle: 'Ford Performance Boss 302 Strut Tower Brace',
+        esSub: 'Refuerzo estructural entre copelas delanteras para máxima precisión en entrada a curva.',
+        enSub: 'Structural front shock-tower reinforcement for sharper turn-in response.'
+      },
+      {
+        category: 'performance',
+        code: 'PERF-03',
+        esTitle: 'Estabilizadoras Tubulares Eibach Anti-Roll (36mm / 25mm)',
+        enTitle: 'Eibach Anti-Roll Tubular Sway Bars (36mm Front / 25mm Rear)',
+        esSub: 'Control activo del balanceo de carrocería mediante barras huecas de alta rigidez torsional.',
+        enSub: 'Reduced body roll via high-torsional-rigidity hollow front and rear sway bars.'
+      },
+      {
+        category: 'performance',
+        code: 'PERF-04',
+        esTitle: 'Barra Panhard / Torsión Ajustable Whiteline',
+        enTitle: 'Whiteline Adjustable Panhard Bar',
+        esSub: 'Centrado milimétrico del eje rígido trasero tras el rebaje de altura y eliminación de flexión lateral.',
+        enSub: 'Precision rear live-axle centering after lowering and elimination of lateral deflection.'
+      },
+      {
+        category: 'performance',
+        code: 'PERF-05',
+        esTitle: 'Kit de Admisión Airaid MXP con Filtro Cónico Airaid',
+        enTitle: 'Airaid MXP Cold Air Intake System with Conical Filter',
+        esSub: 'Caja cerrada de alto flujo con toma dinámica y filtro cónico lavable de baja restricción.',
+        enSub: 'High-flow sealed airbox with cold-air ducting and low-restriction conical filter.'
+      },
+      {
+        category: 'performance',
+        code: 'PERF-06',
+        esTitle: 'Mariposa de Admisión BBK 73mm',
+        enTitle: 'BBK 73mm Performance Throttle Body',
+        esSub: 'Cuerpo de aceleración mecanizado en aluminio CNC para una respuesta inmediata al acelerador.',
+        enSub: 'CNC-machined aluminum throttle body delivering sharper throttle response.'
+      },
+      {
+        category: 'performance',
+        code: 'PERF-07',
+        esTitle: 'Colectores Cortos Cerámicos BBK',
+        enTitle: 'BBK Ceramic-Coated Shorty Headers',
+        esSub: 'Colectores tubulares con recubrimiento cerámico térmico para optimizar evacuación y temperatura bajo capó.',
+        enSub: 'Tubular headers with thermal ceramic coating for improved scavenging and lower underhood heat.'
+      },
+      {
+        category: 'performance',
+        code: 'PERF-08',
+        esTitle: 'Tramo Intermedio H-Pipe',
+        enTitle: 'H-Pipe Exhaust Mid-Section',
+        esSub: 'Compensación de pulsos entre bancadas del V6 para un tono profundo, muscular y sin resonancias.',
+        enSub: 'Bank-to-bank exhaust pulse balancing for a deep, muscular V6 exhaust note.'
+      },
+      {
+        category: 'performance',
+        code: 'PERF-09',
+        esTitle: 'Tramo Final Recto con 4 Salidas de Escape',
+        enTitle: 'Straight-Through Quad-Tip Rear Exhaust',
+        esSub: 'Configuración trasera de flujo directo con cuatro colas integradas en el difusor GT500.',
+        enSub: 'Free-flowing rear section terminating in quad exhaust tips integrated into the GT500 diffuser.'
+      },
+      {
+        category: 'performance',
+        code: 'PERF-10',
+        esTitle: 'Discos de Freno Perforados y Ranurados (315mm / 300mm)',
+        enTitle: 'Drilled & Slotted Brake Rotors (315mm Front / 300mm Rear)',
+        esSub: 'Mayor disipación térmica y evacuación de gases en frenadas exigentes.',
+        enSub: 'Enhanced thermal dissipation and pad gas evacuation under spirited braking.'
+      },
+      {
+        category: 'performance',
+        code: 'PERF-11',
+        esTitle: 'Neumáticos Pirelli P Zero (255/40 R19 & 275/40 R19)',
+        enTitle: 'Pirelli P Zero Tires (255/40 R19 Front / 275/40 R19 Rear)',
+        esSub: 'Configuración escalonada UHP para maximizar motricidad trasera y precisión direccional.',
+        enSub: 'Staggered UHP tire setup maximizing rear traction and front steering precision.'
+      },
+
+      // EXTERIOR STYLING (7 items)
+      {
+        category: 'exterior',
+        code: 'EXT-01',
+        esTitle: 'Capó Estilo Shelby GT500 2020',
+        enTitle: '2020 Shelby GT500-Style Hood',
+        esSub: 'Extracción central de aire caliente con rejillas funcionales y nervaduras musculosas.',
+        enSub: 'Central heat-extractor louver assembly with muscular sculpted hood lines.'
+      },
+      {
+        category: 'exterior',
+        code: 'EXT-02',
+        esTitle: 'Calandra Mustang GT 2013–2014 + Angel Eyes',
+        enTitle: '2013–2014 Mustang GT Grille + Angel Eyes',
+        esSub: 'Parrilla superior de nido de abeja con proyectores antiniebla integrados y firma lumínica LED.',
+        enSub: 'Honeycomb upper GT grille with integrated fog lamps and LED angel-eye halo signature.'
+      },
+      {
+        category: 'exterior',
+        code: 'EXT-03',
+        esTitle: 'Lip Frontal Roush Style',
+        enTitle: 'Roush-Style Front Chin Spoiler',
+        esSub: 'Splitter inferior en negro satinado que rebaja visualmente el morro y canaliza el flujo frontal.',
+        enSub: 'Satin black lower chin spoiler lowering front visual stance and guiding airflow.'
+      },
+      {
+        category: 'exterior',
+        code: 'EXT-04',
+        esTitle: 'Llantas Ford Mustang Dark Horse 2025',
+        enTitle: '2025 Ford Mustang Dark Horse Wheels',
+        esSub: 'Diseño multirradio en acabado antracita oscuro de 19 pulgadas con tapa central Pony.',
+        enSub: '19-inch multi-spoke dark anthracite wheels finished with Pony center caps.'
+      },
+      {
+        category: 'exterior',
+        code: 'EXT-05',
+        esTitle: 'Techo Panorámico de Cristal',
+        enTitle: 'Factory Panoramic Glass Roof',
+        esSub: 'Equipamiento exclusivo S197 que aporta luminosidad interior y continuidad visual en negro brillante.',
+        enSub: 'Rare S197 factory glass roof option creating a seamless gloss-black roofline.'
+      },
+      {
+        category: 'exterior',
+        code: 'EXT-06',
+        esTitle: 'Scoops en Ventanillas Laterales',
+        enTitle: 'Quarter Window Louver Scoops',
+        esSub: 'Tomas laterales estilo fastback clásico pintadas a juego con los detalles en negro.',
+        enSub: 'Classic fastback-inspired quarter window scoops finished to match black exterior accents.'
+      },
+      {
+        category: 'exterior',
+        code: 'EXT-07',
+        esTitle: 'Difusor Trasero Shelby GT500 2014',
+        enTitle: '2014 Shelby GT500 Rear Valance Diffuser',
+        esSub: 'Faldón trasero aerodinámico diseñado para alojar las cuatro salidas de escape.',
+        enSub: 'Aerodynamic rear valance engineered to house the quad-tip exhaust layout.'
+      },
+
+      // INTERIOR & TECH (3 items)
+      {
+        category: 'interior',
+        code: 'INT-01',
+        esTitle: 'Volante Deportivo Ergonómico',
+        enTitle: 'Ergonomic Sport Steering Wheel',
+        esSub: 'Aro perfilado de mayor grosor y agarre directo para una conexión pura con la dirección.',
+        enSub: 'Contoured thick-rim sport wheel offering improved grip and steering feedback.'
+      },
+      {
+        category: 'interior',
+        code: 'INT-02',
+        esTitle: 'Molduras de Salpicadero en Fibra de Carbono',
+        enTitle: 'Carbon Fiber Dashboard Trim',
+        esSub: 'Acabado técnico en carbono real/tejido sobre consola y paneles frontales del habitáculo.',
+        enSub: 'Technical carbon-weave trim accents across the cockpit fascia and center console.'
+      },
+      {
+        category: 'interior',
+        code: 'INT-03',
+        esTitle: 'Unidad Multimedia Dynavin N7 Pro',
+        enTitle: 'Dynavin N7 Pro Infotainment Head Unit',
+        esSub: 'Integración OEM específica para Mustang S197 con navegación, telemetría y conectividad moderna.',
+        enSub: 'S197-specific OEM-fit infotainment system with navigation and modern smartphone integration.'
+      }
+    ];
+
+    // Switch Language ES <-> EN
+    function setLanguage(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
+
+      // Update toggle button styles
+      const btnEs = document.getElementById('btn-es');
+      const btnEn = document.getElementById('btn-en');
+      if (lang === 'es') {
+        btnEs.className = 'px-3 py-1.5 rounded-lg font-mono text-xs font-semibold tracking-wider transition-all bg-ruby-bright text-white shadow-sm';
+        btnEn.className = 'px-3 py-1.5 rounded-lg font-mono text-xs font-semibold tracking-wider transition-all text-titanium hover:text-pearl';
+      } else {
+        btnEn.className = 'px-3 py-1.5 rounded-lg font-mono text-xs font-semibold tracking-wider transition-all bg-ruby-bright text-white shadow-sm';
+        btnEs.className = 'px-3 py-1.5 rounded-lg font-mono text-xs font-semibold tracking-wider transition-all text-titanium hover:text-pearl';
+      }
+
+      // Translate static nodes
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (i18n[lang][key]) {
+          el.textContent = i18n[lang][key];
+        }
+      });
+
+      renderGallery();
+      renderSpecs();
+    }
+
+    // Render Curated Gallery Cards
+    function renderGallery() {
+      const grid = document.getElementById('gallery-grid');
+      grid.innerHTML = galleryItems.map((item, idx) => {
+        const title = currentLang === 'es' ? item.titleEs : item.titleEn;
+        const caption = currentLang === 'es' ? item.captionEs : item.captionEn;
+        const tag = currentLang === 'es' ? item.tagEs : item.tagEn;
+        const loadText = i18n[currentLang].load_photo;
+        const inspectText = i18n[currentLang].inspect_photo;
+
+        const mediaBlock = item.imgSrc
+          ? `<div class="relative w-full h-full">
+               <img src="${item.imgSrc}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+               ${item.isRearPlate ? `
+                 <div class="absolute bottom-[21%] left-[68.5%] -translate-x-1/2 px-2.5 py-0.5 rounded bg-obsidian/95 border border-ruby-bright/80 shadow-md pointer-events-none">
+                   <span class="font-mono text-[9px] font-bold tracking-widest text-pearl">3.7 CYCLONE</span>
+                 </div>
+               ` : ''}
+             </div>`
+          : `<div class="w-full h-full flex items-center justify-center relative group-hover:scale-105 transition-transform duration-500">
+               ${item.svgDiagram}
+               <div class="absolute bottom-3 left-3 px-2.5 py-1 rounded-md bg-obsidian/85 border border-white/10 font-mono text-[10px] text-titanium">
+                 REF: ${item.fileRef}
+               </div>
+             </div>`;
+
+        return `
+          <article class="group rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/60 overflow-hidden flex flex-col transition-all duration-300">
+            <!-- Media Viewport -->
+            <div class="relative aspect-[16/10] bg-obsidian overflow-hidden border-b border-white/10">
+              ${mediaBlock}
+              <div class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-obsidian/85 backdrop-blur-md border border-white/10 font-mono text-[10px] uppercase tracking-wider text-ruby-bright">
+                ${tag}
+              </div>
+              <!-- Quick Overlay Controls -->
+              <div class="absolute top-3 right-3 flex items-center gap-1.5">
+                <button onclick="openLightbox(${idx})" class="px-2.5 py-1.5 rounded-lg bg-obsidian/85 hover:bg-ruby-bright backdrop-blur-md border border-white/15 text-pearl font-mono text-[10px] uppercase tracking-wider transition-colors">
+                  ${inspectText}
+                </button>
+              </div>
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="font-mono text-[11px] text-titanium mb-1">${item.code}</div>
+                <h3 class="font-display font-bold text-2xl uppercase text-pearl mb-2 group-hover:text-ruby-bright transition-colors">
+                  ${title}
+                </h3>
+                <p class="text-sm text-titanium leading-relaxed mb-4">
+                  ${caption}
+                </p>
+              </div>
+
+              <div class="pt-3 border-t border-white/10 flex items-center justify-between gap-2">
+                <span class="font-mono text-[11px] text-titanium/80 truncate">${item.fileRef}</span>
+                <label class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-obsidian hover:bg-carbon border border-white/10 text-xs font-mono text-pearl transition-colors">
+                  <svg class="w-3.5 h-3.5 text-ruby-bright" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                  <span>${loadText}</span>
+                  <input type="file" accept="image/*" class="hidden" onchange="handleGalleryUpload(event, ${idx})" />
+                </label>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    // Filter Specs Tabs
+    function filterSpecs(category) {
+      currentFilter = category;
+      document.querySelectorAll('.spec-tab').forEach(btn => {
+        btn.className = 'spec-tab px-4 py-2 rounded-xl font-mono text-xs uppercase tracking-wider transition-all bg-graphite text-titanium hover:text-pearl border border-white/10';
+      });
+      const activeBtn = document.getElementById(`tab-${category}`);
+      if (activeBtn) {
+        activeBtn.className = 'spec-tab px-4 py-2 rounded-xl font-mono text-xs uppercase tracking-wider transition-all bg-ruby-bright text-white';
+      }
+      renderSpecs();
+    }
+
+    // Render Build Sheet Cards
+    function renderSpecs() {
+      const container = document.getElementById('specs-container');
+      const filtered = currentFilter === 'all'
+        ? buildSpecs
+        : buildSpecs.filter(item => item.category === currentFilter);
+
+      container.innerHTML = filtered.map(item => {
+        const title = currentLang === 'es' ? item.esTitle : item.enTitle;
+        const sub = currentLang === 'es' ? item.esSub : item.enSub;
+        const catLabel = i18n[currentLang][`cat_${item.category}`];
+
+        return `
+          <div class="p-5 rounded-2xl bg-graphite border border-white/10 hover:border-ruby-bright/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-obsidian border border-white/10 text-ruby-bright">
+                  ${catLabel}
+                </span>
+                <span class="font-mono text-xs text-titanium/70">${item.code}</span>
+              </div>
+              <h3 class="font-display font-bold text-xl uppercase text-pearl leading-snug mb-2">
+                ${title}
+              </h3>
+              <p class="text-xs sm:text-sm text-titanium leading-relaxed">
+                ${sub}
+              </p>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Upload Hero Cover Image
+    function handleHeroUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const heroImg = document.getElementById('hero-img');
+        const heroFallback = document.getElementById('hero-fallback');
+        heroImg.src = e.target.result;
+        heroImg.classList.remove('hidden');
+        heroFallback.classList.add('hidden');
+        showToast(currentLang === 'es' ? 'Portada actualizada correctamente' : 'Hero cover updated');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Upload Individual Gallery Image
+    function handleGalleryUpload(event, index) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        galleryItems[index].imgSrc = e.target.result;
+        renderGallery();
+        showToast(
+          currentLang === 'es'
+            ? `Fotografía cargada en ${galleryItems[index].code}`
+            : `Photo loaded into ${galleryItems[index].code}`
+        );
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Lightbox Modal Controls
+    function openLightbox(index) {
+      const item = galleryItems[index];
+      const lb = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lb-img');
+      const lbMask = document.getElementById('lb-plate-mask');
+
+      document.getElementById('lb-code').textContent = item.code;
+      document.getElementById('lb-title').textContent = currentLang === 'es' ? item.titleEs : item.titleEn;
+      document.getElementById('lb-caption').textContent = currentLang === 'es' ? item.captionEs : item.captionEn;
+      document.getElementById('lb-file').textContent = item.fileRef;
+
+      if (item.imgSrc) {
+        lbImg.src = item.imgSrc;
+      } else {
+        // Convert inline SVG schematic to data URI for crisp inspection
+        const encoded = encodeURIComponent(item.svgDiagram);
+        lbImg.src = `data:image/svg+xml;utf8,${encoded}`;
+      }
+
+      if (item.isRearPlate && item.imgSrc) {
+        lbMask.classList.remove('hidden');
+      } else {
+        lbMask.classList.add('hidden');
+      }
+
+      lb.classList.remove('hidden');
+    }
+
+    function closeLightbox(event) {
+      if (!event || event.target.id === 'lightbox') {
+        document.getElementById('lightbox').classList.add('hidden');
+      }
+    }
+
+    // Download Standalone HTML (Preserves any photos the user loaded into the page)
+    function downloadStandaloneHTML() {
+      const docClone = document.documentElement.cloneNode(true);
+      const htmlString = '<!DOCTYPE html>\n' + docClone.outerHTML;
+      const blob = new Blob([htmlString], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'index.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast(
+        currentLang === 'es'
+          ? 'Archivo index.html descargado y listo para publicar'
+          : 'Standalone index.html downloaded and ready to host'
+      );
+    }
+
+    // Copy Official Title using execCommand fallback
+    function copyProjectHandle() {
+      const tempInput = document.createElement('input');
+      tempInput.value = 'THE 3.7 CYCLONE PROJECT — 2014 Ford Mustang V6 S197';
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      showToast(currentLang === 'es' ? 'Título copiado al portapapeles' : 'Title copied to clipboard');
+    }
+
+    // Toast Feedback Helper
+    let toastTimeout;
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const msg = document.getElementById('toast-msg');
+      msg.textContent = message;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 3200);
+    }
+
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', () => {
+      setLanguage('es');
+    });
+  </script>
+
+</body></html>
