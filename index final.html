@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>THE 3.7 CYCLONE PROJECT — 2014 Mustang V6</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,500;0,600;0,700;1,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-void: #08080a;
+      --bg-graphite: #111216;
+      --bg-elevated: #17181d;
+      --bg-card: #131418;
+      --ruby: #9b111e;
+      --ruby-bright: #c81d2e;
+      --ruby-glow: rgba(200, 29, 46, 0.24);
+      --ruby-soft: rgba(155, 17, 30, 0.14);
+      --text-main: #f4f4f6;
+      --text-muted: #989ca6;
+      --text-dim: #666a74;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-ruby: rgba(200, 29, 46, 0.42);
+      --font-display: 'Chakra Petch', sans-serif;
+      --font-sans: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg-void);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 80% 8%, rgba(155, 17, 30, 0.14), transparent 36%),
+        radial-gradient(circle at 15% 45%, rgba(200, 29, 46, 0.07), transparent 40%),
+        var(--bg-void);
+      color: var(--text-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button, input, label {
+      font-family: inherit;
+    }
+
+    /* Header */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(8, 8, 10, 0.84);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .topbar-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-badge {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--border-ruby);
+      background: linear-gradient(135deg, rgba(155, 17, 30, 0.32), rgba(20, 21, 26, 0.9));
+      display: grid;
+      place-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #ff6b78;
+      letter-spacing: 0.04em;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 0.98rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    .brand-sub {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+    }
+
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: 1.4rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .nav-links a:hover {
+      color: var(--text-main);
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .lang-switch {
+      display: inline-flex;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      padding: 2px;
+      border-radius: 4px;
+    }
+
+    .lang-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.35rem 0.65rem;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .lang-btn.active {
+      background: var(--ruby-bright);
+      color: #ffffff;
+      box-shadow: 0 0 12px var(--ruby-glow);
+    }
+
+    .btn-ruby {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      background: linear-gradient(135deg, var(--ruby-bright), var(--ruby));
+      color: #fff;
+      border: 1px solid rgba(255, 110, 122, 0.35);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.52rem 0.9rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.2s ease, filter 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-ruby:hover {
+      filter: brightness(1.08);
+      box-shadow: 0 6px 22px var(--ruby-glow);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 0.52rem 0.88rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--border-ruby);
+      background: rgba(200, 29, 46, 0.08);
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      min-height: 78vh;
+      max-height: 860px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .hero-media {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 58%;
+      filter: contrast(1.06) saturate(1.06);
+      display: none;
+    }
+
+    .hero-media img.has-photo {
+      display: block;
+    }
+
+    .hero-placeholder {
+      width: 100%;
+      height: 100%;
+      background:
+        linear-gradient(125deg, rgba(155, 17, 30, 0.24), transparent 45%),
+        repeating-linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.018) 0px,
+          rgba(255, 255, 255, 0.018) 1px,
+          transparent 1px,
+          transparent 64px
+        ),
+        linear-gradient(180deg, #131419 0%, #09090c 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .hero-placeholder.hidden {
+      display: none;
+    }
+
+    .hero-scrim {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(180deg, rgba(8, 8, 10, 0.35) 0%, rgba(8, 8, 10, 0.52) 48%, rgba(8, 8, 10, 0.95) 100%),
+        linear-gradient(90deg, rgba(8, 8, 10, 0.88) 0%, rgba(8, 8, 10, 0.45) 58%, rgba(8, 8, 10, 0.2) 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 4.5rem 1.25rem 3rem;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #ff6b78;
+      background: rgba(155, 17, 30, 0.2);
+      border: 1px solid var(--border-ruby);
+      padding: 0.32rem 0.7rem;
+      border-radius: 3px;
+      margin-bottom: 1rem;
+    }
+
+    .kicker-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--ruby-bright);
+      box-shadow: 0 0 8px var(--ruby-bright);
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 6vw, 4.35rem);
+      font-weight: 700;
+      line-height: 0.98;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      max-width: 16ch;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 span {
+      color: #e62e3d;
+    }
+
+    .hero-lead {
+      max-width: 58ch;
+      color: #d4d7de;
+      font-size: 0.98rem;
+      margin-bottom: 1.65rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 2.2rem;
+    }
+
+    .telemetry-strip {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 1.25rem;
+    }
+
+    .tel-item {
+      background: rgba(17, 18, 22, 0.78);
+      border: 1px solid var(--border-subtle);
+      border-left: 2px solid var(--ruby-bright);
+      padding: 0.75rem 0.9rem;
+    }
+
+    .tel-label {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .tel-val {
+      font-family: var(--font-display);
+      font-size: 1.02rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    /* Sections */
+    .section {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 4.2rem 1.25rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .section-head {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      margin-bottom: 2.2rem;
+    }
+
+    .section-tag {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #ff6b78;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3.6vw, 2.5rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      line-height: 1.08;
+    }
+
+    .section-desc {
+      max-width: 68ch;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Concept / Manifesto */
+    .concept-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .manifesto-box {
+      background: linear-gradient(160deg, rgba(23, 24, 30, 0.95), rgba(14, 15, 19, 0.98));
+      border: 1px solid var(--border-subtle);
+      border-top: 2px solid var(--ruby-bright);
+      padding: 1.65rem;
+      border-radius: 4px;
+    }
+
+    .manifesto-box p {
+      color: #dcdfe6;
+      font-size: 1rem;
+      line-height: 1.72;
+      margin-bottom: 1rem;
+    }
+
+    .manifesto-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.9rem;
+    }
+
+    .pillar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: 1.2rem;
+      border-radius: 4px;
+      transition: border-color 0.2s ease;
+    }
+
+    .pillar-card:hover {
+      border-color: var(--border-ruby);
+    }
+
+    .pillar-num {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: #ff6b78;
+      margin-bottom: 0.35rem;
+      display: block;
+    }
+
+    .pillar-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.08rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.35rem;
+    }
+
+    .pillar-card p {
+      font-size: 0.87rem;
+      color: var(--text-muted);
+    }
+
+    /* Gallery */
+    .gallery-group {
+      margin-bottom: 2.6rem;
+    }
+
+    .gallery-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .group-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-bottom: 0.65rem;
+      margin-bottom: 1.15rem;
+      border-bottom: 1px solid rgba(200, 29, 46, 0.28);
+    }
+
+    .group-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .group-count {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.1rem;
+    }
+
+    .photo-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .photo-frame {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      background: #0c0d10;
+      overflow: hidden;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .photo-frame img.loaded {
+      display: block;
+    }
+
+    .plate-blur-overlay {
+      position: absolute;
+      display: none;
+      backdrop-filter: blur(11px);
+      -webkit-backdrop-filter: blur(11px);
+      background: rgba(10, 10, 14, 0.42);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 3px;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .plate-blur-overlay.active {
+      display: block;
+    }
+
+    .photo-empty {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      text-align: center;
+      background:
+        radial-gradient(circle at 50% 35%, rgba(155, 17, 30, 0.14), transparent 65%),
+        #0d0e12;
+    }
+
+    .photo-empty.hidden {
+      display: none;
+    }
+
+    .slot-code {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: #ff6b78;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.35rem;
+    }
+
+    .slot-ref {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--text-dim);
+      margin-bottom: 0.85rem;
+    }
+
+    .upload-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.48rem 0.85rem;
+      background: rgba(200, 29, 46, 0.16);
+      border: 1px solid var(--border-ruby);
+      color: #ffd5d9;
+      border-radius: 3px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .upload-label:hover {
+      background: rgba(200, 29, 46, 0.3);
+    }
+
+    .upload-label input[type="file"] {
+      display: none;
+    }
+
+    .photo-meta {
+      padding: 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      flex: 1;
+    }
+
+    .photo-caption-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .photo-caption-sub {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .photo-toolbar {
+      margin-top: auto;
+      padding-top: 0.65rem;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .mini-btn {
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      padding: 0.28rem 0.55rem;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .mini-btn:hover {
+      border-color: var(--border-ruby);
+      color: var(--text-main);
+    }
+
+    .blur-controls {
+      display: none;
+      width: 100%;
+      padding-top: 0.55rem;
+      margin-top: 0.35rem;
+      border-top: 1px dashed rgba(255, 255, 255, 0.08);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+
+    .blur-controls.visible {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.45rem;
+    }
+
+    .blur-controls label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .blur-controls input[type="range"] {
+      accent-color: var(--ruby-bright);
+      width: 100%;
+    }
+
+    /* Spec Sheet */
+    .spec-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .spec-tab {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-family: var(--font-display);
+      font-size: 0.86rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.55rem 1rem;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .spec-tab.active {
+      background: rgba(200, 29, 46, 0.18);
+      border-color: var(--ruby-bright);
+      color: #fff;
+    }
+
+    .spec-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .spec-category {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .spec-category.hidden-cat {
+      display: none;
+    }
+
+    .spec-cat-head {
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-subtle);
+      border-left: 3px solid var(--ruby-bright);
+      padding: 0.9rem 1.15rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .spec-cat-title {
+      font-family: var(--font-display);
+      font-size: 1.08rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .spec-cat-badge {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: #ff6b78;
+    }
+
+    .spec-list {
+      list-style: none;
+    }
+
+    .spec-item {
+      padding: 0.8rem 1.15rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .spec-item:last-child {
+      border-bottom: none;
+    }
+
+    .spec-bullet {
+      width: 7px;
+      height: 7px;
+      margin-top: 0.45rem;
+      background: var(--ruby-bright);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    /* Export / Publish Box */
+    .publish-box {
+      background: linear-gradient(145deg, rgba(24, 25, 32, 0.96), rgba(13, 14, 18, 0.98));
+      border: 1px solid var(--border-ruby);
+      border-radius: 4px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .status-note {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      color: #9be7b0;
+      min-height: 1.1rem;
+    }
+
+    .footer {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+    }
+
+    @media (min-width: 680px) {
+      .telemetry-strip {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+      .photo-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .pillars-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .publish-box {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    @media (min-width: 960px) {
+      .nav-links {
+        display: flex;
+      }
+      .concept-grid {
+        grid-template-columns: 1.35fr 1fr;
+        align-items: start;
+      }
+      .spec-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="#top" class="brand-mark">
+        <div class="brand-badge">3.7</div>
+        <div>
+          <div class="brand-title">THE 3.7 CYCLONE PROJECT</div>
+          <div class="brand-sub" data-i18n="brandSub">2014 FORD MUSTANG V6 · S197 SPEC</div>
+        </div>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary Navigation">
+        <a href="#concept" data-i18n="navConcept">Concepto</a>
+        <a href="#gallery" data-i18n="navGallery">Galería</a>
+        <a href="#specs" data-i18n="navSpecs">Ficha Técnica</a>
+        <a href="#export" data-i18n="navExport">Publicar</a>
+      </nav>
+
+      <div class="topbar-actions">
+        <div class="lang-switch" role="group" aria-label="Language switcher">
+          <button type="button" class="lang-btn active" data-lang="es">ES</button>
+          <button type="button" class="lang-btn" data-lang="en">EN</button>
+        </div>
+        <button type="button" class="btn-ruby" id="exportHtmlBtnTop" data-i18n="exportShort">Exportar HTML</button>
+      </div>
+    </div>
+  </header>
+
+  <section id="top" class="hero">
+    <div class="hero-media">
+      <img id="heroImg" alt="The 3.7 Cyclone Project — 2014 Ford Mustang V6" />
+      <div class="hero-placeholder" id="heroPlaceholder">
+        <label class="upload-label">
+          <span data-i18n="loadHeroPhoto">Cargar portada (IMG_3688.jpeg)</span>
+          <input type="file" accept="image/*" id="heroFileInput" />
+        </label>
+      </div>
+    </div>
+    <div class="hero-scrim"></div>
+
+    <div class="hero-content">
+      <div class="kicker">
+        <span class="kicker-dot"></span>
+        <span data-i18n="heroKicker">DOSSIER OFICIAL DE INGENIERÍA · S197 V6</span>
+      </div>
+      <h1 data-i18n-html="heroTitle">THE 3.7 <span>CYCLONE</span> PROJECT</h1>
+      <p class="hero-lead" data-i18n="heroLead">
+        Presentación técnica y visual de un Ford Mustang V6 3.7L de 2014 construido con criterio coherente: estética exterior agresiva, rigidez de chasis, respuesta de admisión y escape y puesta a punto interior.
+      </p>
+      <div class="hero-actions">
+        <a href="#specs" class="btn-ruby" data-i18n="ctaSpecs">Ver Ficha Técnica</a>
+        <a href="#gallery" class="btn-ghost" data-i18n="ctaGallery">Explorar Galería</a>
+        <label class="btn-ghost">
+          <span data-i18n="changeHeroPhoto">Cambiar foto portada</span>
+          <input type="file" accept="image/*" id="heroFileInputAlt" style="display:none;" />
+        </label>
+      </div>
+
+      <div class="telemetry-strip">
+        <div class="tel-item">
+          <span class="tel-label" data-i18n="telEngineLabel">Propulsor</span>
+          <span class="tel-val">3.7L V6 Cyclone</span>
+        </div>
+        <div class="tel-item">
+          <span class="tel-label" data-i18n="telPowerLabel">Potencia Base</span>
+          <span class="tel-val">309 CV · 305 HP</span>
+        </div>
+        <div class="tel-item">
+          <span class="tel-label" data-i18n="telChassisLabel">Chasis y Suspensión</span>
+          <span class="tel-val">Bilstein B6 + Eibach</span>
+        </div>
+        <div class="tel-item">
+          <span class="tel-label" data-i18n="telWheelsLabel">Llantas y Neumáticos</span>
+          <span class="tel-val">Dark Horse 19" · P Zero</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="concept" class="section">
+    <div class="section-head">
+      <span class="section-tag" data-i18n="conceptTag">01 · FILOSOFÍA Y BIOGRAFÍA</span>
+      <h2 class="section-title" data-i18n="conceptTitle">Ingeniería Americana en Seis Cilindros</h2>
+      <p class="section-desc" data-i18n="conceptDesc">
+        Un enfoque de proyecto de autor, lejos de catálogos genéricos: cada modificación responde a una identidad visual y mecánica definida.
+      </p>
+    </div>
+
+    <div class="concept-grid">
+      <div class="manifesto-box">
+        <p data-i18n="bioP1">
+          Ingeniería americana de nueva generación. El bloque 3.7L Cyclone representa la versión más refinada y capaz de un V6 en la historia del Mustang: un propulsor atmosférico que iguala y supera la potencia de los V8 anteriores, pero en seis cilindros, con menor masa sobre el eje delantero y un equilibrio dinámico más ágil.
+        </p>
+        <p data-i18n="bioP2">
+          THE 3.7 CYCLONE PROJECT parte de esa base mecánica para construir un conjunto sólido y limpio: flujo de aire optimizado desde la admisión Airaid MXP y mariposa BBK de 73 mm hasta los colectores cortos cerámicos, H-pipe y tramo final recto de cuatro salidas, respaldado por amortiguación Bilstein B6 Performance, muelles Eibach Pro-Kit, barras estabilizadoras Eibach y barra Panhard ajustable Whiteline.
+        </p>
+      </div>
+
+      <div class="pillars-grid">
+        <div class="pillar-card">
+          <span class="pillar-num">01 / V6 EVOLUTION</span>
+          <h3 data-i18n="pillar1Title">Potencia de V8 en 6 Cilindros</h3>
+          <p data-i18n="pillar1Body">Refinamiento mecánico americano que supera a los V8 anteriores en eficiencia y carácter en seis cilindros.</p>
+        </div>
+        <div class="pillar-card">
+          <span class="pillar-num">02 / CHASSIS &amp; GRIP</span>
+          <h3 data-i18n="pillar2Title">Aplomo y Precisión</h3>
+          <p data-i18n="pillar2Body">Bilstein B6, Eibach Pro-Kit, barra Boss 302, estabilizadoras tubulares y neumáticos Pirelli P Zero en doble medida.</p>
+        </div>
+        <div class="pillar-card">
+          <span class="pillar-num">03 / COHESIVE SPEC</span>
+          <h3 data-i18n="pillar3Title">Identidad Unificada</h3>
+          <p data-i18n="pillar3Body">Estética exterior, habitáculo en carbono y tecnología Dynavin N7 Pro integrados como un único proyecto.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery" class="section">
+    <div class="section-head">
+      <span class="section-tag" data-i18n="galleryTag">02 · ARCHIVO VISUAL CURADO</span>
+      <h2 class="section-title" data-i18n="galleryTitle">Galería del Proyecto</h2>
+      <p class="section-desc" data-i18n="galleryDesc">
+        Carga tus fotografías en cada ranura. En las vistas traseras se aplica un desenfoque óptico suave sobre la matrícula de forma automática y se conserva al exportar el HTML.
+      </p>
+    </div>
+
+    <div id="galleryContainer"></div>
+  </section>
+
+  <section id="specs" class="section">
+    <div class="section-head">
+      <span class="section-tag" data-i18n="specsTag">03 · ESPECIFICACIONES VERIFICADAS</span>
+      <h2 class="section-title" data-i18n="specsTitle">Ficha Técnica — Mustang V6 3.7L (2014)</h2>
+      <p class="section-desc" data-i18n="specsDesc">
+        Configuración completa organizada por áreas: estética exterior, estética interior y conjunto performance.
+      </p>
+    </div>
+
+    <div class="spec-tabs" role="tablist">
+      <button type="button" class="spec-tab active" data-cat="all" data-i18n="tabAll">Todo (21)</button>
+      <button type="button" class="spec-tab" data-cat="exterior" data-i18n="tabExterior">Estética Exterior (7)</button>
+      <button type="button" class="spec-tab" data-cat="interior" data-i18n="tabInterior">Estética Interior (3)</button>
+      <button type="button" class="spec-tab" data-cat="performance" data-i18n="tabPerformance">Performance (11)</button>
+    </div>
+
+    <div class="spec-grid" id="specGrid"></div>
+  </section>
+
+  <section id="export" class="section">
+    <div class="publish-box">
+      <div>
+        <span class="section-tag" data-i18n="exportTag">04 · DESCARGA Y PUBLICACIÓN</span>
+        <h2 class="section-title" style="margin-top:0.25rem;" data-i18n="exportTitle">Generar index.html Final</h2>
+        <p class="section-desc" style="margin-top:0.35rem;" data-i18n="exportDesc">
+          Exporta un único archivo index.html con tus imágenes cargadas y el desenfoque óptico aplicado a las matrículas traseras, listo para subir a GitHub Pages y enlazar en Instagram.
+        </p>
+        <div class="status-note" id="exportStatus"></div>
+      </div>
+      <div style="display:flex; gap:0.65rem; flex-wrap:wrap;">
+        <button type="button" class="btn-ruby" id="exportHtmlBtnMain" data-i18n="exportMainBtn">Descargar index.html</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div>THE 3.7 CYCLONE PROJECT · 2014 FORD MUSTANG V6</div>
+    <div data-i18n="footerNote">Dossier bilingüe ES / EN · Estética negro, grafito y acentos Ruby Red.</div>
+  </footer>
+
+  <script>
+    const I18N = {
+      es: {
+        brandSub: "2014 FORD MUSTANG V6 · S197 SPEC",
+        navConcept: "Concepto",
+        navGallery: "Galería",
+        navSpecs: "Ficha Técnica",
+        navExport: "Publicar",
+        exportShort: "Exportar HTML",
+        loadHeroPhoto: "Cargar portada (IMG_3688.jpeg)",
+        changeHeroPhoto: "Cambiar foto portada",
+        heroKicker: "DOSSIER OFICIAL DE INGENIERÍA · S197 V6",
+        heroTitle: "THE 3.7 <span>CYCLONE</span> PROJECT",
+        heroLead: "Presentación técnica y visual de un Ford Mustang V6 3.7L de 2014 construido con criterio coherente: estética exterior agresiva, rigidez de chasis, respuesta de admisión y escape y puesta a punto interior.",
+        ctaSpecs: "Ver Ficha Técnica",
+        ctaGallery: "Explorar Galería",
+        telEngineLabel: "Propulsor",
+        telPowerLabel: "Potencia Base",
+        telChassisLabel: "Chasis y Suspensión",
+        telWheelsLabel: "Llantas y Neumáticos",
+        conceptTag: "01 · FILOSOFÍA Y BIOGRAFÍA",
+        conceptTitle: "Ingeniería Americana en Seis Cilindros",
+        conceptDesc: "Un enfoque de proyecto de autor, lejos de catálogos genéricos: cada modificación responde a una identidad visual y mecánica definida.",
+        bioP1: "Ingeniería americana de nueva generación. El bloque 3.7L Cyclone representa la versión más refinada y capaz de un V6 en la historia del Mustang: un propulsor atmosférico que iguala y supera la potencia de los V8 anteriores, pero en seis cilindros, con menor masa sobre el eje delantero y un equilibrio dinámico más ágil.",
+        bioP2: "THE 3.7 CYCLONE PROJECT parte de esa base mecánica para construir un conjunto sólido y limpio: flujo de aire optimizado desde la admisión Airaid MXP y mariposa BBK de 73 mm hasta los colectores cortos cerámicos, H-pipe y tramo final recto de cuatro salidas, respaldado por amortiguación Bilstein B6 Performance, muelles Eibach Pro-Kit, barras estabilizadoras Eibach y barra Panhard ajustable Whiteline.",
+        pillar1Title: "Potencia de V8 en 6 Cilindros",
+        pillar1Body: "Refinamiento mecánico americano que supera a los V8 anteriores en eficiencia y carácter en seis cilindros.",
+        pillar2Title: "Aplomo y Precisión",
+        pillar2Body: "Bilstein B6, Eibach Pro-Kit, barra Boss 302, estabilizadoras tubulares y neumáticos Pirelli P Zero en doble medida.",
+        pillar3Title: "Identidad Unificada",
+        pillar3Body: "Estética exterior, habitáculo en carbono y tecnología Dynavin N7 Pro integrados como un único proyecto.",
+        galleryTag: "02 · ARCHIVO VISUAL CURADO",
+        galleryTitle: "Galería del Proyecto",
+        galleryDesc: "Carga tus fotografías en cada ranura. En las vistas traseras se aplica un desenfoque óptico suave sobre la matrícula de forma automática y se conserva al exportar el HTML.",
+        specsTag: "03 · ESPECIFICACIONES VERIFICADAS",
+        specsTitle: "Ficha Técnica — Mustang V6 3.7L (2014)",
+        specsDesc: "Configuración completa organizada por áreas: estética exterior, estética interior y conjunto performance.",
+        tabAll: "Todo (21)",
+        tabExterior: "Estética Exterior (7)",
+        tabInterior: "Estética Interior (3)",
+        tabPerformance: "Performance (11)",
+        exportTag: "04 · DESCARGA Y PUBLICACIÓN",
+        exportTitle: "Generar index.html Final",
+        exportDesc: "Exporta un único archivo index.html con tus imágenes cargadas y el desenfoque óptico aplicado a las matrículas traseras, listo para subir a GitHub Pages y enlazar en Instagram.",
+        exportMainBtn: "Descargar index.html",
+        footerNote: "Dossier bilingüe ES / EN · Estética negro, grafito y acentos Ruby Red.",
+        uploadBtn: "Seleccionar foto",
+        replaceBtn: "Cambiar foto",
+        adjustBlurBtn: "Ajustar desenfoque",
+        clearBtn: "Quitar",
+        blurX: "Pos. X (%)",
+        blurY: "Pos. Y (%)",
+        blurW: "Ancho (%)",
+        catExteriorTitle: "Estética Exterior",
+        catInteriorTitle: "Estética Interior",
+        catPerformanceTitle: "Performance",
+        groupExteriorTitle: "Exterior y Zaga",
+        groupInteriorTitle: "Habitáculo",
+        groupPerformanceTitle: "Motor, Chasis y Frenos",
+        exportedMsg: "Archivo index.html generado y descargado con tus fotografías y desenfoques aplicados."
+      },
+      en: {
+        brandSub: "2014 FORD MUSTANG V6 · S197 SPEC",
+        navConcept: "Concept",
+        navGallery: "Gallery",
+        navSpecs: "Spec Sheet",
+        navExport: "Publish",
+        exportShort: "Export HTML",
+        loadHeroPhoto: "Load hero photo (IMG_3688.jpeg)",
+        changeHeroPhoto: "Replace hero photo",
+        heroKicker: "OFFICIAL ENGINEERING DOSSIER · S197 V6",
+        heroTitle: "THE 3.7 <span>CYCLONE</span> PROJECT",
+        heroLead: "Technical and visual presentation of a 2014 Ford Mustang 3.7L V6 built with cohesive intent: sharp exterior styling, chassis rigidity, intake and exhaust flow, and a focused cabin.",
+        ctaSpecs: "View Spec Sheet",
+        ctaGallery: "Explore Gallery",
+        telEngineLabel: "Powertrain",
+        telPowerLabel: "Base Output",
+        telChassisLabel: "Chassis & Suspension",
+        telWheelsLabel: "Wheels & Tires",
+        conceptTag: "01 · PHILOSOPHY & BIOGRAPHY",
+        conceptTitle: "American Engineering in Six Cylinders",
+        conceptDesc: "A purpose-driven build away from generic tuning catalogs: every upgrade serves a clear visual and mechanical identity.",
+        bioP1: "Next-generation American engineering. The 3.7L Cyclone is the most refined and capable V6 in Mustang history: a naturally aspirated engine that matches and surpasses earlier V8 output in six cylinders, with lower front-axle mass and sharper dynamic balance.",
+        bioP2: "THE 3.7 CYCLONE PROJECT builds on that foundation with clean airflow from the Airaid MXP intake and 73 mm BBK throttle body to ceramic shorty headers, an H-pipe, and a straight-through quad-tip rear section, backed by Bilstein B6 Performance dampers, Eibach Pro-Kit springs, Eibach sway bars, and a Whiteline adjustable Panhard bar.",
+        pillar1Title: "V8 Output in 6 Cylinders",
+        pillar1Body: "American mechanical refinement matching and surpassing earlier V8s with six-cylinder balance.",
+        pillar2Title: "Poise & Precision",
+        pillar2Body: "Bilstein B6, Eibach Pro-Kit, Boss 302 strut brace, tubular sway bars, and staggered Pirelli P Zero tires.",
+        pillar3Title: "Cohesive Identity",
+        pillar3Body: "Exterior styling, carbon-trimmed cockpit, and Dynavin N7 Pro tech unified into one build.",
+        galleryTag: "02 · CURATED PHOTO ARCHIVE",
+        galleryTitle: "Project Gallery",
+        galleryDesc: "Load your photos into each slot. Rear shots automatically apply a clean optical blur over the license plate and bake it in when exporting HTML.",
+        specsTag: "03 · VERIFIED BUILD LIST",
+        specsTitle: "Spec Sheet — 2014 Mustang 3.7L V6",
+        specsDesc: "Complete build breakdown across exterior styling, interior styling, and performance hardware.",
+        tabAll: "All (21)",
+        tabExterior: "Exterior Styling (7)",
+        tabInterior: "Interior Styling (3)",
+        tabPerformance: "Performance (11)",
+        exportTag: "04 · EXPORT & PUBLISH",
+        exportTitle: "Generate Final index.html",
+        exportDesc: "Export a single index.html file containing your loaded images and baked-in rear license plate blur, ready for GitHub Pages and your Instagram bio link.",
+        exportMainBtn: "Download index.html",
+        footerNote: "Bilingual ES / EN dossier · Deep black, graphite & Ruby Red accents.",
+        uploadBtn: "Select photo",
+        replaceBtn: "Replace photo",
+        adjustBlurBtn: "Adjust blur",
+        clearBtn: "Remove",
+        blurX: "Pos X (%)",
+        blurY: "Pos Y (%)",
+        blurW: "Width (%)",
+        catExteriorTitle: "Exterior Styling",
+        catInteriorTitle: "Interior Styling",
+        catPerformanceTitle: "Performance",
+        groupExteriorTitle: "Exterior & Rear End",
+        groupInteriorTitle: "Cockpit",
+        groupPerformanceTitle: "Engine, Chassis & Brakes",
+        exportedMsg: "index.html generated and downloaded with your photos and blur adjustments applied."
+      }
+    };
+
+    const SPECS = [
+      {
+        category: "exterior",
+        es: "Lip frontal Roush style",
+        en: "Roush-style front lip"
+      },
+      {
+        category: "exterior",
+        es: "Calandra Mustang GT 2013–2014 + angel eyes",
+        en: "2013–2014 Mustang GT grille + angel eyes"
+      },
+      {
+        category: "exterior",
+        es: "Capó Shelby GT500 2020 style",
+        en: "2020 Shelby GT500-style hood"
+      },
+      {
+        category: "exterior",
+        es: "Llantas Ford Mustang Dark Horse 2025",
+        en: "2025 Ford Mustang Dark Horse wheels"
+      },
+      {
+        category: "exterior",
+        es: "Techo panorámico",
+        en: "Panoramic roof"
+      },
+      {
+        category: "exterior",
+        es: "Scoops ventanillas laterales",
+        en: "Side window scoops"
+      },
+      {
+        category: "exterior",
+        es: "Difusor trasero Shelby GT500 2014",
+        en: "2014 Shelby GT500 rear diffuser"
+      },
+      {
+        category: "interior",
+        es: "Volante deportivo",
+        en: "Sport steering wheel"
+      },
+      {
+        category: "interior",
+        es: "Decorativos salpicadero en fibra de carbono",
+        en: "Carbon fiber dashboard trim"
+      },
+      {
+        category: "interior",
+        es: "Dynavin N7Pro estéreo",
+        en: "Dynavin N7Pro head unit"
+      },
+      {
+        category: "performance",
+        es: "Suspensión Bilstein B6 Performance + muelles Eibach Pro-Kit",
+        en: "Bilstein B6 Performance suspension + Eibach Pro-Kit springs"
+      },
+      {
+        category: "performance",
+        es: "Barras estabilizadoras Eibach Anti-Roll 36 mm tubular delantera y 25 mm trasera",
+        en: "Eibach Anti-Roll sway bars: 36 mm tubular front & 25 mm rear"
+      },
+      {
+        category: "performance",
+        es: "Kit de admisión Airaid MXP con filtro cónico Airaid",
+        en: "Airaid MXP intake kit with Airaid conical filter"
+      },
+      {
+        category: "performance",
+        es: "Mariposa de admisión 73 mm BBK",
+        en: "73 mm BBK throttle body"
+      },
+      {
+        category: "performance",
+        es: "Colectores cortos cerámicos BBK",
+        en: "BBK ceramic shorty headers"
+      },
+      {
+        category: "performance",
+        es: "Tramo intermedio H-pipe",
+        en: "H-pipe mid-section"
+      },
+      {
+        category: "performance",
+        es: "Tramo final recto con 4 salidas de escape",
+        en: "Straight-through rear section with quad exhaust tips"
+      },
+      {
+        category: "performance",
+        es: "Barra Panhard / torsión Whiteline ajustable",
+        en: "Whiteline adjustable Panhard / torsion bar"
+      },
+      {
+        category: "performance",
+        es: "Discos de freno ranurados y perforados: 315 mm delanteros y 300 mm traseros",
+        en: "Slotted & drilled brake rotors: 315 mm front & 300 mm rear"
+      },
+      {
+        category: "performance",
+        es: "Neumáticos Pirelli P Zero: 255/40 R19 delanteros y 275/40 R19 traseros",
+        en: "Pirelli P Zero tires: 255/40 R19 front & 275/40 R19 rear"
+      },
+      {
+        category: "performance",
+        es: "Barra de torretas Ford Performance Boss 302",
+        en: "Ford Performance Boss 302 strut tower brace"
+      }
+    ];
+
+    const GALLERY_SLOTS = [
+      {
+        id: "ext-1",
+        group: "exterior",
+        code: "EXT-01",
+        ref: "IMG_4598.heic",
+        esTitle: "Perfil Lateral Completo",
+        enTitle: "Full Side Profile",
+        esSub: "Caída Eibach Pro-Kit, llantas Dark Horse 2025 y scoops laterales.",
+        enSub: "Eibach Pro-Kit stance, 2025 Dark Horse wheels, and side window scoops.",
+        hasPlateBlur: false
+      },
+      {
+        id: "ext-2",
+        group: "exterior",
+        code: "EXT-02",
+        ref: "IMG_3698.jpeg",
+        esTitle: "Tres Cuartos Frontal",
+        enTitle: "Front Three-Quarter",
+        esSub: "Capó Shelby GT500 2020 style, calandra GT con angel eyes y lip Roush.",
+        enSub: "2020 Shelby GT500-style hood, GT grille with angel eyes, and Roush lip.",
+        hasPlateBlur: false
+      },
+      {
+        id: "ext-3",
+        group: "exterior",
+        code: "EXT-03",
+        ref: "IMG_2621.heic",
+        esTitle: "Zaga Completa y 4 Salidas",
+        enTitle: "Rear View & Quad Tips",
+        esSub: "Difusor trasero Shelby GT500 2014 y tramo final recto de cuatro salidas.",
+        enSub: "2014 Shelby GT500 rear diffuser and quad-tip straight-through exhaust.",
+        hasPlateBlur: true,
+        blur: { x: 48.5, y: 69.5, w: 25, h: 7.5 }
+      },
+      {
+        id: "ext-4",
+        group: "exterior",
+        code: "EXT-04",
+        ref: "IMG_3687.jpeg",
+        esTitle: "Tres Cuartos Trasera",
+        enTitle: "Rear Three-Quarter",
+        esSub: "Perspectiva trasera con franjas, pilotos y difusor GT500.",
+        enSub: "Rear three-quarter angle highlighting stripes, taillights, and GT500 diffuser.",
+        hasPlateBlur: true,
+        blur: { x: 69.5, y: 78.2, w: 12.5, h: 4.5 }
+      },
+      {
+        id: "int-1",
+        group: "interior",
+        code: "INT-01",
+        ref: "IMG_0190.jpeg",
+        esTitle: "Puesto de Conducción",
+        enTitle: "Driver Cockpit",
+        esSub: "Volante deportivo, decorativos en fibra de carbono y Dynavin N7Pro.",
+        enSub: "Sport steering wheel, carbon fiber trim, and Dynavin N7Pro head unit.",
+        hasPlateBlur: false
+      },
+      {
+        id: "perf-1",
+        group: "performance",
+        code: "PRF-01",
+        ref: "IMG_3138.heic",
+        esTitle: "Vano Motor 3.7L Cyclone",
+        enTitle: "3.7L Cyclone Engine Bay",
+        esSub: "Admisión Airaid MXP, mariposa BBK 73 mm y barra de torretas Boss 302.",
+        enSub: "Airaid MXP intake, 73 mm BBK throttle body, and Boss 302 strut brace.",
+        hasPlateBlur: false
+      },
+      {
+        id: "perf-2",
+        group: "performance",
+        code: "PRF-02",
+        ref: "IMG_4592.heic",
+        esTitle: "Frenos y Bilstein B6",
+        enTitle: "Brakes & Bilstein B6",
+        esSub: "Discos ranurados y perforados, amortiguador Bilstein B6 y Pirelli P Zero.",
+        enSub: "Slotted & drilled rotors, Bilstein B6 damper, and Pirelli P Zero tire.",
+        hasPlateBlur: false
+      }
+    ];
+
+    let currentLang = "es";
+    let activeCategory = "all";
+    let heroDataUrl = "";
+    const slotImages = {};
+
+    function applyLanguage(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      document.querySelectorAll(".lang-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.lang === lang);
+      });
+
+      const dict = I18N[lang];
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.dataset.i18n;
+        if (dict[key] !== undefined) {
+          el.textContent = dict[key];
+        }
+      });
+
+      document.querySelectorAll("[data-i18n-html]").forEach(el => {
+        const key = el.dataset.i18nHtml;
+        if (dict[key] !== undefined) {
+          el.innerHTML = dict[key];
+        }
+      });
+
+      renderGallery();
+      renderSpecs();
+    }
+
+    function renderSpecs() {
+      const grid = document.getElementById("specGrid");
+      const dict = I18N[currentLang];
+      const categories = [
+        { id: "exterior", title: dict.catExteriorTitle },
+        { id: "interior", title: dict.catInteriorTitle },
+        { id: "performance", title: dict.catPerformanceTitle }
+      ];
+
+      grid.innerHTML = categories.map(cat => {
+        const items = SPECS.filter(s => s.category === cat.id);
+        const hiddenClass = (activeCategory !== "all" && activeCategory !== cat.id) ? "hidden-cat" : "";
+        return `
+          <div class="spec-category ${hiddenClass}">
+            <div class="spec-cat-head">
+              <h3 class="spec-cat-title">${cat.title}</h3>
+              <span class="spec-cat-badge">${items.length} ITEMS</span>
+            </div>
+            <ul class="spec-list">
+              ${items.map(item => `
+                <li class="spec-item">
+                  <span class="spec-bullet"></span>
+                  <span>${item[currentLang]}</span>
+                </li>
+              `).join("")}
+            </ul>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function updateBlurOverlayStyle(slotId) {
+      const slot = GALLERY_SLOTS.find(s => s.id === slotId);
+      if (!slot || !slot.hasPlateBlur) return;
+      const overlay = document.getElementById(`blur-${slotId}`);
+      if (!overlay) return;
+      const hasImg = Boolean(slotImages[slotId]);
+      overlay.classList.toggle("active", hasImg);
+      overlay.style.left = `${slot.blur.x}%`;
+      overlay.style.top = `${slot.blur.y}%`;
+      overlay.style.width = `${slot.blur.w}%`;
+      overlay.style.height = `${slot.blur.h}%`;
+    }
+
+    function renderGallery() {
+      const container = document.getElementById("galleryContainer");
+      const dict = I18N[currentLang];
+
+      const groups = [
+        { key: "exterior", title: dict.groupExteriorTitle },
+        { key: "interior", title: dict.groupInteriorTitle },
+        { key: "performance", title: dict.groupPerformanceTitle }
+      ];
+
+      container.innerHTML = groups.map(group => {
+        const slots = GALLERY_SLOTS.filter(s => s.group === group.key);
+        return `
+          <div class="gallery-group">
+            <div class="group-header">
+              <h3 class="group-title">${group.title}</h3>
+              <span class="group-count">${slots.length} ${currentLang === "es" ? "TOMAS" : "SHOTS"}</span>
+            </div>
+            <div class="photo-grid">
+              ${slots.map(slot => {
+                const imgData = slotImages[slot.id];
+                const title = currentLang === "es" ? slot.esTitle : slot.enTitle;
+                const sub = currentLang === "es" ? slot.esSub : slot.enSub;
+                const blurHtml = slot.hasPlateBlur ? `
+                  <div class="blur-controls" id="blurCtrl-${slot.id}">
+                    <label>${dict.blurX}: <span id="valX-${slot.id}">${slot.blur.x}</span>
+                      <input type="range" min="5" max="90" step="0.5" value="${slot.blur.x}" data-slot="${slot.id}" data-axis="x" />
+                    </label>
+                    <label>${dict.blurY}: <span id="valY-${slot.id}">${slot.blur.y}</span>
+                      <input type="range" min="5" max="92" step="0.5" value="${slot.blur.y}" data-slot="${slot.id}" data-axis="y" />
+                    </label>
+                    <label>${dict.blurW}: <span id="valW-${slot.id}">${slot.blur.w}</span>
+                      <input type="range" min="5" max="45" step="0.5" value="${slot.blur.w}" data-slot="${slot.id}" data-axis="w" />
+                    </label>
+                  </div>
+                ` : "";
+
+                return `
+                  <article class="photo-card">
+                    <div class="photo-frame">
+                      <img id="img-${slot.id}" src="${imgData || ""}" alt="${title}" class="${imgData ? "loaded" : ""}" />
+                      ${slot.hasPlateBlur ? `<div class="plate-blur-overlay ${imgData ? "active" : ""}" id="blur-${slot.id}"></div>` : ""}
+                      <div class="photo-empty ${imgData ? "hidden" : ""}" id="empty-${slot.id}">
+                        <span class="slot-code">${slot.code}</span>
+                        <span class="slot-ref">${slot.ref}</span>
+                        <label class="upload-label">
+                          <span>${dict.uploadBtn}</span>
+                          <input type="file" accept="image/*" data-upload-slot="${slot.id}" />
+                        </label>
+                      </div>
+                    </div>
+                    <div class="photo-meta">
+                      <div class="photo-caption-title">${title}</div>
+                      <div class="photo-caption-sub">${sub}</div>
+                      <div class="photo-toolbar">
+                        <label class="mini-btn" style="cursor:pointer;">
+                          <span>${imgData ? dict.replaceBtn : dict.uploadBtn}</span>
+                          <input type="file" accept="image/*" data-upload-slot="${slot.id}" style="display:none;" />
+                        </label>
+                        <div style="display:flex; gap:0.35rem;">
+                          ${slot.hasPlateBlur ? `<button type="button" class="mini-btn" data-toggle-blur="${slot.id}">${dict.adjustBlurBtn}</button>` : ""}
+                          ${imgData ? `<button type="button" class="mini-btn" data-clear-slot="${slot.id}">${dict.clearBtn}</button>` : ""}
+                        </div>
+                      </div>
+                      ${blurHtml}
+                    </div>
+                  </article>
+                `;
+              }).join("")}
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      GALLERY_SLOTS.forEach(s => updateBlurOverlayStyle(s.id));
+
+      container.querySelectorAll('input[type="file"][data-upload-slot]').forEach(input => {
+        input.addEventListener("change", e => {
+          const file = e.target.files && e.target.files[0];
+          if (!file) return;
+          const slotId = e.target.dataset.uploadSlot;
+          const reader = new FileReader();
+          reader.onload = ev => {
+            slotImages[slotId] = ev.target.result;
+            renderGallery();
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+
+      container.querySelectorAll("[data-clear-slot]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          delete slotImages[btn.dataset.clearSlot];
+          renderGallery();
+        });
+      });
+
+      container.querySelectorAll("[data-toggle-blur]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const panel = document.getElementById(`blurCtrl-${btn.dataset.toggleBlur}`);
+          if (panel) panel.classList.toggle("visible");
+        });
+      });
+
+      container.querySelectorAll('input[type="range"][data-slot]').forEach(slider => {
+        slider.addEventListener("input", () => {
+          const slot = GALLERY_SLOTS.find(s => s.id === slider.dataset.slot);
+          if (!slot) return;
+          const val = parseFloat(slider.value);
+          slot.blur[slider.dataset.axis] = val;
+          const labelSpan = document.getElementById(`val${slider.dataset.axis.toUpperCase()}-${slot.id}`);
+          if (labelSpan) labelSpan.textContent = val;
+          updateBlurOverlayStyle(slot.id);
+        });
+      });
+    }
+
+    function setHeroImage(dataUrl) {
+      heroDataUrl = dataUrl;
+      const img = document.getElementById("heroImg");
+      const ph = document.getElementById("heroPlaceholder");
+      if (dataUrl) {
+        img.src = dataUrl;
+        img.classList.add("has-photo");
+        ph.classList.add("hidden");
+      } else {
+        img.removeAttribute("src");
+        img.classList.remove("has-photo");
+        ph.classList.remove("hidden");
+      }
+    }
+
+    function handleHeroFile(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => setHeroImage(ev.target.result);
+      reader.readAsDataURL(file);
+    }
+
+    async function bakeBlurredImage(dataUrl, blurCfg) {
+      return new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          canvas.width = img.naturalWidth || img.width;
+          canvas.height = img.naturalHeight || img.height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0);
+
+          const rx = (blurCfg.x / 100) * canvas.width;
+          const ry = (blurCfg.y / 100) * canvas.height;
+          const rw = (blurCfg.w / 100) * canvas.width;
+          const rh = (blurCfg.h / 100) * canvas.height;
+
+          const pad = Math.max(8, Math.round(rh * 0.35));
+          const sx = Math.max(0, Math.floor(rx - pad));
+          const sy = Math.max(0, Math.floor(ry - pad));
+          const sw = Math.min(canvas.width - sx, Math.ceil(rw + pad * 2));
+          const sh = Math.min(canvas.height - sy, Math.ceil(rh + pad * 2));
+
+          if (sw > 0 && sh > 0) {
+            const temp = document.createElement("canvas");
+            temp.width = sw;
+            temp.height = sh;
+            const tctx = temp.getContext("2d");
+            tctx.filter = `blur(${Math.max(12, Math.round(sh * 0.32))}px)`;
+            tctx.drawImage(canvas, sx, sy, sw, sh, 0, 0, sw, sh);
+            ctx.drawImage(temp, sx, sy);
+          }
+
+          resolve(canvas.toDataURL("image/jpeg", 0.92));
+        };
+        img.onerror = () => resolve(dataUrl);
+        img.src = dataUrl;
+      });
+    }
+
+    async function exportStandaloneHtml() {
+      const bakedSlots = {};
+      for (const slot of GALLERY_SLOTS) {
+        const raw = slotImages[slot.id];
+        if (!raw) continue;
+        if (slot.hasPlateBlur && slot.blur) {
+          bakedSlots[slot.id] = await bakeBlurredImage(raw, slot.blur);
+        } else {
+          bakedSlots[slot.id] = raw;
+        }
+      }
+
+      const clone = document.documentElement.cloneNode(true);
+      clone.querySelectorAll("script[data-export-runtime]").forEach(n => n.remove());
+
+      const heroCloneImg = clone.querySelector("#heroImg");
+      const heroClonePh = clone.querySelector("#heroPlaceholder");
+      if (heroDataUrl && heroCloneImg) {
+        heroCloneImg.src = heroDataUrl;
+        heroCloneImg.classList.add("has-photo");
+        if (heroClonePh) heroClonePh.classList.add("hidden");
+      }
+
+      GALLERY_SLOTS.forEach(slot => {
+        const data = bakedSlots[slot.id];
+        const cardImg = clone.querySelector(`#img-${slot.id}`);
+        const cardEmpty = clone.querySelector(`#empty-${slot.id}`);
+        const blurOverlay = clone.querySelector(`#blur-${slot.id}`);
+        if (blurOverlay) blurOverlay.remove();
+        if (data && cardImg) {
+          cardImg.src = data;
+          cardImg.classList.add("loaded");
+          if (cardEmpty) cardEmpty.classList.add("hidden");
+        }
+      });
+
+      const runtimeScript = clone.ownerDocument.createElement("script");
+      runtimeScript.setAttribute("data-export-runtime", "true");
+      runtimeScript.textContent = `
+        (function() {
+          const I18N = ${JSON.stringify(I18N)};
+          let lang = "${currentLang}";
+          function applyLang(nextLang) {
+            lang = nextLang;
+            document.documentElement.lang = lang;
+            document.querySelectorAll(".lang-btn").forEach(b => b.classList.toggle("active", b.dataset.lang === lang));
+            const d = I18N[lang];
+            document.querySelectorAll("[data-i18n]").forEach(el => {
+              if (d[el.dataset.i18n] !== undefined) el.textContent = d[el.dataset.i18n];
+            });
+            document.querySelectorAll("[data-i18n-html]").forEach(el => {
+              if (d[el.dataset.i18nHtml] !== undefined) el.innerHTML = d[el.dataset.i18nHtml];
+            });
+            document.querySelectorAll("[data-es]").forEach(el => {
+              el.textContent = el.getAttribute("data-" + lang) || el.textContent;
+            });
+          }
+          document.querySelectorAll(".lang-btn").forEach(btn => {
+            btn.addEventListener("click", () => applyLang(btn.dataset.lang));
+          });
+          document.querySelectorAll(".spec-tab").forEach(tab => {
+            tab.addEventListener("click", () => {
+              document.querySelectorAll(".spec-tab").forEach(t => t.classList.toggle("active", t === tab));
+              const cat = tab.dataset.cat;
+              document.querySelectorAll(".spec-category").forEach(box => {
+                box.classList.toggle("hidden-cat", cat !== "all" && box.dataset.category !== cat);
+              });
+            });
+          });
+          const expMain = document.getElementById("exportHtmlBtnMain");
+          const expTop = document.getElementById("exportHtmlBtnTop");
+          function downloadSelf() {
+            const htmlStr = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            const blob = new Blob([htmlStr], { type: "text/html;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "index.html";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1500);
+          }
+          if (expMain) expMain.addEventListener("click", downloadSelf);
+          if (expTop) expTop.addEventListener("click", downloadSelf);
+        })();
+      `;
+
+      clone.querySelectorAll(".spec-category").forEach(catBox => {
+        const idx = Array.from(clone.querySelectorAll(".spec-category")).indexOf(catBox);
+        const catKey = ["exterior", "interior", "performance"][idx];
+        catBox.setAttribute("data-category", catKey);
+        const matching = SPECS.filter(s => s.category === catKey);
+        const lis = catBox.querySelectorAll(".spec-item span:last-child");
+        lis.forEach((span, i) => {
+          if (matching[i]) {
+            span.setAttribute("data-es", matching[i].es);
+            span.setAttribute("data-en", matching[i].en);
+          }
+        });
+      });
+
+      clone.querySelectorAll(".photo-card").forEach(card => {
+        const imgEl = card.querySelector("img[id^='img-']");
+        if (!imgEl) return;
+        const slotId = imgEl.id.replace("img-", "");
+        const slot = GALLERY_SLOTS.find(s => s.id === slotId);
+        if (!slot) return;
+        const titleEl = card.querySelector(".photo-caption-title");
+        const subEl = card.querySelector(".photo-caption-sub");
+        if (titleEl) {
+          titleEl.setAttribute("data-es", slot.esTitle);
+          titleEl.setAttribute("data-en", slot.enTitle);
+        }
+        if (subEl) {
+          subEl.setAttribute("data-es", slot.esSub);
+          subEl.setAttribute("data-en", slot.enSub);
+        }
+      });
+
+      clone.querySelectorAll("input[type='file'], .upload-label, .photo-toolbar, .blur-controls").forEach(el => {
+        if (el.closest(".hero-media")) el.remove();
+        else if (el.classList.contains("photo-toolbar") || el.classList.contains("blur-controls")) el.remove();
+      });
+
+      clone.body.appendChild(runtimeScript);
+
+      const finalHtml = "<!DOCTYPE html>
+" + clone.outerHTML;
+      const blob = new Blob([finalHtml], { type: "text/html;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "index.html";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+
+      const statusEl = document.getElementById("exportStatus");
+      if (statusEl) {
+        statusEl.textContent = I18N[currentLang].exportedMsg;
+      }
+    }
+
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.addEventListener("click", () => applyLanguage(btn.dataset.lang));
+    });
+
+    document.querySelectorAll(".spec-tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        activeCategory = tab.dataset.cat;
+        document.querySelectorAll(".spec-tab").forEach(t => t.classList.toggle("active", t === tab));
+        renderSpecs();
+      });
+    });
+
+    document.getElementById("heroFileInput").addEventListener("change", e => handleHeroFile(e.target.files[0]));
+    document.getElementById("heroFileInputAlt").addEventListener("change", e => handleHeroFile(e.target.files[0]));
+    document.getElementById("exportHtmlBtnTop").addEventListener("click", exportStandaloneHtml);
+    document.getElementById("exportHtmlBtnMain").addEventListener("click", exportStandaloneHtml);
+
+    applyLanguage("es");
+  </script>
+</body>
+</html>
